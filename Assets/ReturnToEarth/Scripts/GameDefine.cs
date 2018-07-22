@@ -8,8 +8,3 @@ public static class GameDefine  {
         ERROR_DATA_NOT_IN_PROPER_RANGE,
     }
 }
-
-public static class Assertion
-{
-
-}

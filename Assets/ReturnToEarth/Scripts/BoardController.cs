@@ -12,10 +12,7 @@ namespace ReturnToEarth
         [SerializeField]
         private int height = 5;
 
-        [SerializeField]
-        private Vector3 center;
-
-        [SerializeField]
+        private Vector3 blockCenter;
         private Vector3 blockScale;
 
         [SerializeField]
@@ -23,18 +20,16 @@ namespace ReturnToEarth
 
         private List<List<Block>> blocks;
 
-        public void OnEnable()
-        {
-            Debug.Log(Initialize());
-        }
-
-        public GameDefine.Result Initialize()
+        public GameDefine.Result Initialize(Vector3 uniformCenter, Vector3 uniformScale)
         {
             if (width <= 0 || height <= 0)
                 return GameDefine.Result.ERROR_DATA_NOT_IN_PROPER_RANGE;
 
-            float startPosX = ( center.x - ( ( ( blockScale.x * width ) / 2.0f ) - ( blockScale.x ) / 2.0f ) );
-            float startPosY = ( center.y + ( ( ( blockScale.y * height ) / 2.0f ) - ( blockScale.y ) / 2.0f ) );
+            blockCenter = uniformCenter;
+            blockScale = uniformScale;
+
+            float startPosX = ( blockCenter.x - ( ( ( blockScale.x * width ) / 2.0f ) - ( blockScale.x ) / 2.0f ) );
+            float startPosY = ( blockCenter.y + ( ( ( blockScale.y * height ) / 2.0f ) - ( blockScale.y ) / 2.0f ) );
 
             float currentPosX = startPosX;
             float currentPosY = startPosY;
@@ -46,7 +41,7 @@ namespace ReturnToEarth
                 blocks.Add(new List<Block>());
                 for (int j = 0; j < width; j++)
                 {
-                    GameObject created = Instantiate(blockPrefab, new Vector3(currentPosX, currentPosY, center.z), Quaternion.identity, transform);
+                    GameObject created = Instantiate(blockPrefab, new Vector3(currentPosX, currentPosY, blockCenter.z), Quaternion.identity, transform);
                     Block currentBlock = created.GetComponent<Block>();
                     currentBlock.Initialize(new Vector2(i, j), created.transform.position);
                     currentPosX += blockScale.x;
