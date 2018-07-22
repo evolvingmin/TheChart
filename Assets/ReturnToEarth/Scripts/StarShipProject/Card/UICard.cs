@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
+
 // 카드 를 드레그하는 시스템. 
 // UI 가 가변이 되서는 안된다.
 // 3개들어가면 3개, 내개 들어가면 4개, 
