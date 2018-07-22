@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 75fcc803827fb154c8c2894285f6345e
+timeCreated: 1504190786
+licenseType: Free
+TextScriptImporter:
+  userData: <?xml version="1.0" encoding="utf-16"?><CSVMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"><columns><string>index</string><string>name</string><string>damage</string><string>attack_range</string><string>attackspeed</string><string>magazine</string><string>hp</string><string>avoid_rate</string></columns><columnTypes><string>int</string><string>string</string><string>int</string><string>int</string><string>int</string><string>int</string><string>int</string><string>int</string></columnTypes><isNameType>false</isNameType><isStatic>true</isStatic><staticCsvPath>Table/OwnedUtilitys.CSV</staticCsvPath><generatedScriptPath>Assets/StarShip/Scripts/Table/OwnedUtilitysTable.cs</generatedScriptPath></CSVMetaData>
+  assetBundleName: 
+  assetBundleVariant: 

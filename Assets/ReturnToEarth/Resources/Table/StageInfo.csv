@@ -1,0 +1,5 @@
+i_index,f_stageDelay,i_totalSmallMonster,i_totalBossMonster,s_smallMonsterType,s_mBossMonsterType,s_bossMonsterType,s_stageType,i_rewardCredit,i_rewardDebries
+1,1,100,5,"1,8","2,3,7,7",9,"1,2,4",0,5000
+2,1,100,5,"1,8","2,3,7,7",9,"1,2,4",0,5000
+3,1,100,5,"1,8","2,3,7,7",9,"1,2,4",0,5000
+4,1,100,5,"1,8","2,3,7,7",9,"1,2,4",0,5000

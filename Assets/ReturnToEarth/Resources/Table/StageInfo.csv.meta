@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 2dc0b02ed1324d2429e08efc57185b17
+timeCreated: 1503816168
+licenseType: Free
+TextScriptImporter:
+  userData: <?xml version="1.0" encoding="utf-16"?><CSVMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"><columns><string>i_index</string><string>f_stageDelay</string><string>i_totalSmallMonster</string><string>i_totalBossMonster</string><string>s_smallMonsterType</string><string>s_mBossMonsterType</string><string>s_bossMonsterType</string><string>s_stageType</string><string>i_rewardCredit</string><string>i_rewardDebries</string></columns><columnTypes><string>int</string><string>float</string><string>int</string><string>int</string><string>string</string><string>string</string><string>string</string><string>string</string><string>int</string><string>int</string></columnTypes><isNameType>true</isNameType><isStatic>true</isStatic><staticCsvPath>Table/StageInfo</staticCsvPath><generatedScriptPath>Assets/StarShip/Scripts/Table/StageInfoTable.cs</generatedScriptPath></CSVMetaData>
+  assetBundleName: 
+  assetBundleVariant: 

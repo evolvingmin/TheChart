@@ -1,0 +1,10 @@
+i_index,s_size,s_name,i_hp,i_attack,f_attackSpeed,s_attackType,s_attackRange,i_defence,f_moveSpeed,s_appearance,s_bullet,f_bulletSpeed,f_dropRate,f_dropRateSupplies,f_dropRateRearmetals,f_dropRateBioMetals
+1,1*1,FireDragon,100,10,1,laser,middle,10,2.5,enemy1,e_laser,7.5,30,20,10,5.5
+2,1*2,BlackBird,392,5,1.7,mass,middle,22,3,enemy2,e_laser,9,35,23,11,6
+3,2*1,BlueCircle,336,15,1.3,missile,far,29,1.7,enemy2,e_laser,5.1,40,26,12,6.5
+4,2*2,name2,440,8,1.2,missile,near,23,5,enemy2,e_laser,15,45,29,13,7
+5,1*3,name3,376,3,1,mass,near,26,4,enemy2,e_laser,12,50,32,14,7.5
+6,3*1,name4,405,10,1.5,mass,middle,24,3.5,enemy2,e_laser,10.5,55,35,15,8
+7,3*3,name5,339,20,1.3,missile,far,26,1.5,enemy2,e_laser,4.5,60,38,16,8.5
+8,1*1,FireDragon2,150,10,1,laser,middle,10,2.5,enemy1,e_laser,7.5,65,41,17,9
+9,3*3,Invisible Dragon,500,40,1,laser,near,40,2.5,enemy3,e_mass,7.5,70,44,18,9.5

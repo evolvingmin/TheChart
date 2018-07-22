@@ -1,0 +1,2 @@
+i_index,i_blueprintIndex,i_damage_SC,i_damage_SP,f_accuracy_SC,f_accuracy_SP,i_initialbullet_SC,i_initialbullet_SP,i_magazine_SC,i_magazine_SP,f_criticalrate_SC,f_criticalrate_SP,i_maxdurability_SC,i_maxdurability_SP,i_cost_SC,i_cost_SP
+1,1,25,4,0,4,4,3,1,4,30,4,1,3,10,4

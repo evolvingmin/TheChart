@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 573c8e3b33c0c294eb1f28469853af1f
+timeCreated: 1502622648
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Strike Fighter Expanded
+  fontNames:
+  - Strike Fighter Expanded
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

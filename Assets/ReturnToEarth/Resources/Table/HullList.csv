@@ -1,0 +1,6 @@
+i_index,s_name,f_defense_SB,f_defense_SR,i_weaponslot,i_hangerslot,i_utilityslots,i_hp_SB,i_hp_SR,f_avoidrate_SB,f_avoidrate_SR,s_icon,s_targetprefab,s_type,i_maxcost_SB,i_maxcost_SR,s_card,i_maxdurability_SB,i_maxdurability_SR,f_droprate_SB,i_droprate_SR
+1,Sejong_The_Great_Class,"30,40",3.5,5,0,0,"220,320",27,"2,5",0.2,Sejong_The_Great_Class,Sejong_The_Great_Class,0,"100,120",11,dummycard,"1,5",1,30,3
+2,Enterprise_Class,"10,20",1.5,3,0,2,"200,300",25,"3,5",0.3,Enterprise_Class,Enterprise_Class,0,"40,80",6,dummycard,"4,9",1,40,4
+3,Admiral_Lee_Class,"20,30",2.5,4,0,1,"210,310",26,"5,8",0.5,Admiral_Lee_Class,Admiral_Lee_Class,0,"30,90",6,dummycard,"7,10",1,50,5
+4,Ticonderoga_Class,"40,50",4.5,2,0,5,"230,330",28,"3,8",0.4,Ticonderoga_Class,Ticonderoga_Class,0,"60,90",8,dummycard,"2,8",1,60,6
+5,Arleigh_Burke_Class,"50,60",5.5,3,0,4,"240,340",29,"3,6",0.4,Arleigh_Burke_Class,Arleigh_Burke_Class,0,"40,70",5,dummycard,"1,9",1,70,7

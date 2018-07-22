@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: f802ad1d555de1f438f018e823ed8a40
+timeCreated: 1502622648
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Strike Fighter Condensed
+  fontNames:
+  - Strike Fighter Condensed
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

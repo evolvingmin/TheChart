@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: f1c361e8a5d27e24e8bc4389f46e736e
+timeCreated: 1504186990
+licenseType: Free
+TextScriptImporter:
+  userData: <?xml version="1.0" encoding="utf-16"?><CSVMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"><columns><string>i_index</string><string>s_size</string><string>s_name</string><string>i_hp</string><string>i_attack</string><string>f_attackSpeed</string><string>s_attackType</string><string>s_attackRange</string><string>i_defence</string><string>f_moveSpeed</string><string>s_appearance</string><string>s_bullet</string><string>f_bulletSpeed</string></columns><columnTypes><string>int</string><string>string</string><string>string</string><string>int</string><string>int</string><string>float</string><string>string</string><string>string</string><string>int</string><string>float</string><string>string</string><string>string</string><string>float</string></columnTypes><isNameType>false</isNameType><isStatic>true</isStatic><staticCsvPath>Table/MonsterInfo</staticCsvPath><generatedScriptPath>Assets/StarShip/Scripts/Table/MonsterInfoTable.cs</generatedScriptPath></CSVMetaData>
+  assetBundleName: 
+  assetBundleVariant: 
