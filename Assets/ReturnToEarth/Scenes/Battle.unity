@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniformScale: {x: 3, y: 3, z: 1}
-  uniformCenter: {x: 0, y: 4, z: 0}
+  uniformCenter: {x: 0, y: 1, z: 0}
   boardController: {fileID: 118015089}
   actorController: {fileID: 93758597}
 --- !u!1 &93758595
@@ -1069,7 +1069,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1606518265
 SpriteRenderer:
   m_ObjectHideFlags: 0

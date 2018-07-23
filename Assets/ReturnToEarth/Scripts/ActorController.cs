@@ -33,8 +33,6 @@ namespace ReturnToEarth
 
         public GameDefine.Result GenerateUnit(int x, int y, Unit.Team team)
         {
-            bool rotated = team == Unit.Team.Enemy;
-
             baseUnitPrefab.SetActive(true);
 
             int selectedSpriteIndex = Random.Range(0, 5);

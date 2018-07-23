@@ -20,6 +20,9 @@ namespace ReturnToEarth
 
         private List<List<Block>> blocks;
 
+
+        private bool isInitializedInEditor = false;
+
         public GameDefine.Result Initialize(Vector3 uniformCenter, Vector3 uniformScale)
         {
             if (width <= 0 || height <= 0)
@@ -43,10 +46,9 @@ namespace ReturnToEarth
                 {
                     GameObject created = Instantiate(blockPrefab, new Vector3(currentPosX, currentPosY, blockCenter.z), Quaternion.identity, transform);
                     Block currentBlock = created.GetComponent<Block>();
-                    currentBlock.Initialize(new Vector2(i, j), created.transform.position);
+                    currentBlock.Initialize(new Vector2(i, j), created.transform.position, blockScale);
                     currentPosX += blockScale.x;
-                    currentBlock.transform.localScale = blockScale;
-                    currentBlock.name = "Block(" + i + "," + j + ")";
+
                     blocks[i].Add(currentBlock);
                 }
                 currentPosY -= blockScale.y;
@@ -77,10 +79,28 @@ namespace ReturnToEarth
             return null;
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnDrawGizmosSelected()
         {
+            blockCenter = GameController.Instance.UniformCenter;
+            blockScale = GameController.Instance.UniformScale;
 
+            float startPosX = ( blockCenter.x - (  ( blockScale.x * width ) / 2.0f ));
+            float startPosY = ( blockCenter.y + (  ( blockScale.y * height ) / 2.0f ));
+
+            float currentPosX = startPosX;
+            float currentPosY = startPosY;
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    DrawGizmos.DrawRect2D( new Vector3(currentPosX, currentPosY), blockScale.x, blockScale.y, Color.blue);
+                    currentPosX += blockScale.x;
+                }
+
+                currentPosY -= blockScale.y;
+                currentPosX = startPosX;
+            }
         }
     }
 

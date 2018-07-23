@@ -212,7 +212,6 @@ public static class TableHandler
                 case StreamMode.Resource:
                 case StreamMode.Sample:
                     return false;
-                    break; // I know but consistency
             }
 
             return Save(path);

@@ -19,12 +19,40 @@ namespace ReturnToEarth
         [SerializeField]
         private ActorController actorController;
 
+        // Singleton Implementation.
+        private static GameController instance = null;
+        public static GameController Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = (GameController)FindObjectOfType(typeof(GameController));
+                return instance;
+            }
+        }
+
+        public Vector3 UniformScale
+        {
+            get
+            {
+                return uniformScale;
+            }
+        }
+
+        public Vector3 UniformCenter
+        {
+            get
+            {
+                return uniformCenter;
+            }
+        }
+
         private void Awake()
         {
             GameDefine.Result results;
 
-            results = boardController.Initialize(uniformCenter, uniformScale);
-            results = actorController.Initialize(boardController, uniformCenter, uniformScale);
+            results = boardController.Initialize(uniformCenter, UniformScale);
+            results = actorController.Initialize(boardController, uniformCenter, UniformScale);
 
             // 개략적인 게임 흐름을 그린다면.
 
@@ -44,6 +72,8 @@ namespace ReturnToEarth
             actorController.GenerateUnit(4, 2, Unit.Team.Friendly);
             actorController.GenerateUnit(5, 4, Unit.Team.Friendly);
             actorController.GenerateUnit(4, 0, Unit.Team.Friendly);
+
+            Debug.Log(results);
         }
 
         // Update is called once per frame

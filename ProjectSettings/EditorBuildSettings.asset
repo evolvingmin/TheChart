@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/ReturnToEarth/Scenes/Old/Construction.unity
-    guid: c025f8ea9c47dbe479fb1b37d3806f08
-  - enabled: 1
-    path: Assets/ReturnToEarth/Scenes/Old/BattleScene.unity
-    guid: eb33d8f2eb9c221439dfeeceae15bc49
+    path: Assets/ReturnToEarth/Scenes/Battle.unity
+    guid: dcb91aa13dc8ee44bbd558666c9224d8
   m_configObjects: {}

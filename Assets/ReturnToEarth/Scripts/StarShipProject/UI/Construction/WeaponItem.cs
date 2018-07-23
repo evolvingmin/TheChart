@@ -8,7 +8,7 @@ namespace StarShip.UI
     public class WeaponItem : MonoBehaviour
     {
         [SerializeField]
-        private Text name = null;
+        private new Text name = null;
         [SerializeField]
         private Button button = null;
         [SerializeField]
