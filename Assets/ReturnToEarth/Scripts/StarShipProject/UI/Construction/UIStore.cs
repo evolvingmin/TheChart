@@ -46,7 +46,7 @@ namespace StarShip.UI
         [SerializeField]
         private Button buyButton;
 
-        private ConstructionUIController UI;
+        //private ConstructionUIController UI;
 
         private UIStoreItem current = null;
 
@@ -57,7 +57,7 @@ namespace StarShip.UI
 
         public bool Initialize(ConstructionUIController constructionUIController)
         {
-            UI = constructionUIController;
+            //UI = constructionUIController;
             root.SetActive(false);
             uiStoreView.Initialize(this, category);
             buyButton.interactable = false;

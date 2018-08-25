@@ -52,10 +52,10 @@ namespace StarShip
                     {
                         blocks[i, j, k] = (GameObject.Instantiate(blockPrefab).GetComponent<Block>());
                         var CurrentBlock = blocks[i, j, k];
-                        CurrentBlock.transform.position = cells[i, j, k].Center;
-                        CurrentBlock.transform.SetParent(board.transform);
-                        CurrentBlock.transform.localScale = new Vector2(cells[i, j, k].rect.width, cells[i, j, k].rect.height);
-                        CurrentBlock.Initialize(cells[i, j, k]);
+                        CurrentBlock.transform.position = this.cells[i, j, k].Center;
+                        CurrentBlock.transform.SetParent(this.board.transform);
+                        CurrentBlock.transform.localScale = new Vector2(cells[i, j, k].rect.width, this.cells[i, j, k].rect.height);
+                        CurrentBlock.Initialize(this.cells[i, j, k]);
                     }
                 }
             }

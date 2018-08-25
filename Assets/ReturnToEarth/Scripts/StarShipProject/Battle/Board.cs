@@ -51,7 +51,7 @@ namespace StarShip
         Vector3 leftTop;
         Vector3 rightTop;
         Vector3 leftBottom;
-        Vector3 rightBottom;
+        //Vector3 rightBottom;
 
         private Vector3 leftTopCellStart;
 
@@ -95,7 +95,7 @@ namespace StarShip
             rightTop.z = 0.0f;
             leftBottom = new Vector3(boardArea.bounds.min.x, boardArea.bounds.max.y - sizeY, 0.0f);
             leftTop = new Vector3(leftBottom.x, rightTop.y, 0.0f);
-            rightBottom = new Vector3(rightTop.x, leftBottom.y, 0.0f);
+            //rightBottom = new Vector3(rightTop.x, leftBottom.y, 0.0f);
 
             GenerateBoard();
             boardIndicator.GenerateIndicators(this ,maxLine, maxRow, maxColumn, cells); 

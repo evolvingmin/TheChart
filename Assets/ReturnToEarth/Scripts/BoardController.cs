@@ -6,11 +6,12 @@ namespace ReturnToEarth
 {
     public class BoardController : MonoBehaviour
     {
+        // https://stackoverflow.com/questions/55984/what-is-the-difference-between-const-and-readonly
         [SerializeField]
-        private int width = 5;
+        private readonly int width = 5;
 
         [SerializeField]
-        private int height = 5;
+        private readonly int height = 5;
 
         private Vector3 blockCenter;
         private Vector3 blockScale;
@@ -43,7 +44,11 @@ namespace ReturnToEarth
                 blocks.Add(new List<Block>());
                 for (int j = 0; j < width; j++)
                 {
-                    GameObject created = Instantiate(blockPrefab, new Vector3(currentPosX, currentPosY, blockCenter.z), Quaternion.identity, transform);
+                    GameObject created = Instantiate(
+                        blockPrefab, 
+                        new Vector3(currentPosX, currentPosY, blockCenter.z), 
+                        Quaternion.identity, transform);
+
                     Block currentBlock = created.GetComponent<Block>();
                     currentBlock.Initialize(new Vector2(i, j), created.transform.position, blockScale);
                     currentPosX += blockScale.x;

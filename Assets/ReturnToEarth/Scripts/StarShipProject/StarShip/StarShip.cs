@@ -63,7 +63,7 @@ namespace StarShip
 
             this.dataProvider = dataProvider;
             battleObject = new BattleObject_Starship();
-            battleObject.Initialize(dataProvider);
+            battleObject.Initialize(this.dataProvider);
 
             switch (mode)
             {
@@ -163,12 +163,12 @@ namespace StarShip
             TableHandler.Row shipInfo = TableHandler.Get("ShipStatus", TableHandler.StreamMode.AppData).GetAt(slotIndex);
             TableHandler.Row hullInfo = TableHandler.Get("OwnedHulls", TableHandler.StreamMode.AppData).FindRow("index", shipInfo.Get<string>("hull"));
 
-            DataProvider dataProvider = new DataProvider("HullList", hullInfo);
-            string prefabName = dataProvider.Get<string>("targetprefab");
+            DataProvider hullListProvider = new DataProvider("HullList", hullInfo);
+            string prefabName = hullListProvider.Get<string>("targetprefab");
             var prefab = Resources.Load(string.Format(path, prefabName));
 
             starship = ( (GameObject)Instantiate(prefab) ).GetComponent<StarShip>();
-            return starship.Initialize(mode, dataProvider);
+            return starship.Initialize(mode, hullListProvider);
         }
 
         // 임시로 넘길 카드리스트, 이 리스트는 무기에서 완성됨

@@ -41,12 +41,13 @@ namespace StarShip
 
         [SerializeField]
         private LineRenderer LaserLine = null;
-
+        /*
         [SerializeField]
         private float lifeTime = 5.0f;
-
+        */
         [SerializeField]
         private bool isDirectional = false;
+        
 
         public bool Initialize(Stack<Bullet> magazine, BulletTypeDel bullectCollect)
         {

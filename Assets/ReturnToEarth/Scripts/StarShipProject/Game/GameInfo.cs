@@ -31,7 +31,7 @@ namespace StarShip
 
         public static void Start(string path) {
                         
-            List<Dictionary<string, object>> data = CSVReader.Read(path);
+            //List<Dictionary<string, object>> data = CSVReader.Read(path);
             /*
             for ( var i = 0; i < data.Count; i++ ) {
                 Debug.Log(data[0][0]);

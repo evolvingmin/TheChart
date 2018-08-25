@@ -31,10 +31,10 @@ namespace StarShip.UI
 
         [SerializeField]
         private WeaponStatDisplayer weaponStatDisplayer = null;
-
+        /*
         [SerializeField]
         private TotalStatDisplayer totalStatDisplayer = null;
-
+        */
         [SerializeField]
         private Button selectionConfirm = null;
 

@@ -18,13 +18,13 @@ namespace StarShip
         private Dictionary<string, string> currentDictionary = null;
 
         private TableHandler.Table blueprintTable = null;
-        private string currentBluePrint = "";
+        //private string currentBluePrint = "";
         private DataType dataType;
 
         public DataProvider(string TargetBluePrint, TableHandler.Row OwnedRow)
         {
             currentRow = OwnedRow;
-            currentBluePrint = TargetBluePrint;
+            //currentBluePrint = TargetBluePrint;
             blueprintTable = TableHandler.Get(TargetBluePrint, TableHandler.StreamMode.Resource);
             dataType = DataType.TableHandlerRow;
         }
@@ -32,7 +32,7 @@ namespace StarShip
         public DataProvider(string TargetBluePrint, Dictionary<string,string> generated)
         {
             currentDictionary = generated;
-            currentBluePrint = TargetBluePrint;
+           // currentBluePrint = TargetBluePrint;
             blueprintTable = TableHandler.Get(TargetBluePrint, TableHandler.StreamMode.Resource);
             dataType = DataType.Dictionary;
         }

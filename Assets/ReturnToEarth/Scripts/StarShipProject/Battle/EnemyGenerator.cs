@@ -34,10 +34,10 @@ namespace StarShip
         private List<Enemy> currentEnemies = new List<Enemy>();
         private Dictionary<string, Sprite> loadedSprite = new Dictionary<string, Sprite>();
 
-
+        /*
         public BattleObject StartshipObject { get { return starshipObject; } }
-        private BattleObject starshipObject;
-
+        private BattleObject starshipObject = null;
+        */
 
         IEnumerator ProgressStage(float LaunchDuration, int TotalMinionCount)
         {

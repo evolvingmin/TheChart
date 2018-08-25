@@ -13,7 +13,7 @@ public class UIItemHolder : MonoBehaviour
     private GameObject prefab;
 
     private Dictionary<int, List<UIItem>> uiItemList;
-    private int currentCategory;
+    //private int currentCategory;
 
     private void Awake()
     {
@@ -54,7 +54,7 @@ public class UIItemHolder : MonoBehaviour
                 item.gameObject.SetActive(item.Category == categoryNum);
             }
         }
-        currentCategory = categoryNum;        
+        //currentCategory = categoryNum;        
         return true;
     }
     

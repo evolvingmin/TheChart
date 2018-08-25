@@ -56,7 +56,7 @@ namespace StarShip
         [SerializeField]
         private GameObject DebrisPrefab = null;
 
-        private float speedForScaleFactor = 0.0f;
+        //private float speedForScaleFactor = 0.0f;
 
         [SerializeField]
         private float minScaleFactor = 1.0f;
