@@ -129,7 +129,7 @@ namespace ReturnToEarth
             actorController.GenerateUnit(5, 4, Unit.Team.Friendly);
             actorController.GenerateUnit(4, 0, Unit.Team.Friendly);
 
-            Debug.Log(results);
+            Debug.Log("GameController Initialized, Result is : " + results);
         }
 
         // Update is called once per frame

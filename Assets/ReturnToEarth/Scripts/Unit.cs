@@ -20,7 +20,7 @@ namespace ReturnToEarth
         private Transform SpriteTransform;
         private SpriteRenderer spriteRenderer;
 
-        private Block currentBlock;
+        //private Block currentBlock;
 
         private void Awake()
         {
@@ -31,7 +31,7 @@ namespace ReturnToEarth
         public void Initialize(Vector3 unitScale, Sprite sprite,  Block block, Team _team)
         {
             spriteRenderer.sprite = sprite;
-            currentBlock = block;
+            //currentBlock = block;
 
             team = _team;
 
@@ -40,7 +40,8 @@ namespace ReturnToEarth
                 transform.Rotate(0, 0, 180.0f);
             }
             SpriteTransform.transform.localScale = unitScale;
-            Debug.Log("Unit Was Initialized, " + currentBlock);
+
+            //Debug.Log("Unit Was Initialized, " + currentBlock);
         }
     }
 }

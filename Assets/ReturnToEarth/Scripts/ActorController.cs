@@ -26,6 +26,8 @@ namespace ReturnToEarth
             unitScale = uniformScale;
             boardController = _boardController;
 
+            
+
             return GameDefine.Result.OK;
         }
 
@@ -35,7 +37,9 @@ namespace ReturnToEarth
         {
             baseUnitPrefab.SetActive(true);
 
-            int selectedSpriteIndex = Random.Range(0, 5);
+            int spriteMaxSize = team == Unit.Team.Friendly ? fiendlySprites.Length : enemySprites.Length;
+
+            int selectedSpriteIndex = Random.Range(0, spriteMaxSize);
 
             Sprite selectedSprite = team == Unit.Team.Friendly ? fiendlySprites[selectedSpriteIndex] : enemySprites[selectedSpriteIndex];
 

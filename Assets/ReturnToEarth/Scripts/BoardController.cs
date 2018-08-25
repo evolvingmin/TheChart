@@ -6,12 +6,11 @@ namespace ReturnToEarth
 {
     public class BoardController : MonoBehaviour
     {
-        // https://stackoverflow.com/questions/55984/what-is-the-difference-between-const-and-readonly
         [SerializeField]
-        private readonly int width = 5;
+        private int width = 5;
 
         [SerializeField]
-        private readonly int height = 5;
+        private int height = 5;
 
         private Vector3 blockCenter;
         private Vector3 blockScale;
