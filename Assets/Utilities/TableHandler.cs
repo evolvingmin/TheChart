@@ -316,8 +316,8 @@ public static class TableHandler
     private static Dictionary<string, Table> tableMap = new Dictionary<string, Table>();
 
     public static string AppDataPath { get { return string.Format("{0}/Table/", UnityEngine.Application.persistentDataPath); } }
-    public static string SamplePath = "Assets/ReturnToEarth/Resources/Table/Sample/";
-    public static string ResourcePath = "Assets/ReturnToEarth/Resources/Table/";
+    public static string SamplePath =   "Assets/ReturnToEarth/Resources/Table/Sample/";
+    public static string ResourcePath =   "Assets/ReturnToEarth/Resources/Table/";
 
     private static Table GenerateTable(string tableName, StreamMode LoadSteam)
     {

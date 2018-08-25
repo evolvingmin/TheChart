@@ -26,7 +26,7 @@ namespace ReturnToEarth
             float x = _location.x - _scale.x / 2.0f;
             float y = _location.y + _scale.y / 2.0f;
 
-            Rect = new Rect(x, y, _scale.x, _scale.y);
+            Rect = new Rect(x, y, spriteRenderer.size.x * _scale.x, spriteRenderer.size.y * _scale.y);
 
             transform.localScale = _scale;
 
