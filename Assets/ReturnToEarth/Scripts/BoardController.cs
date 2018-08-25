@@ -20,8 +20,7 @@ namespace ReturnToEarth
 
         private List<List<Block>> blocks;
 
-
-        private bool isInitializedInEditor = false;
+        //private bool isInitializedInEditor = false;
 
         public GameDefine.Result Initialize(Vector3 uniformCenter, Vector3 uniformScale)
         {

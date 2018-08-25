@@ -40,6 +40,7 @@ namespace ReturnToEarth
                 transform.Rotate(0, 0, 180.0f);
             }
             SpriteTransform.transform.localScale = unitScale;
+            Debug.Log("Unit Was Initialized, " + currentBlock);
         }
     }
 }

@@ -23,16 +23,21 @@ namespace ReturnToEarth
             index= _index;
             location = _location;
 
-            float x = _location.x - _scale.x / 2.0f;
-            float y = _location.y + _scale.y / 2.0f;
+            float x = location.x - _scale.x / 2.0f;
+            float y = location.y + _scale.y / 2.0f;
 
             Rect = new Rect(x, y, spriteRenderer.size.x * _scale.x, spriteRenderer.size.y * _scale.y);
 
             transform.localScale = _scale;
 
-            name = "Block(" + _index.x + "," + _index.y + ")";
+            name = "Block(" + index.x + "," + index.y + ")";
 
             return GameDefine.Result.OK;
+        }
+
+        public override string ToString()
+        {
+            return name;
         }
     }
 

@@ -12,7 +12,7 @@ namespace ReturnToEarth
         [SerializeField]
         private Sprite[] fiendlySprites;
 
-        private Vector3 unitCenter;
+        //private Vector3 unitCenter;
         private Vector3 unitScale;
 
         [SerializeField]
@@ -22,7 +22,7 @@ namespace ReturnToEarth
 
         public GameDefine.Result Initialize(BoardController _boardController, Vector3 uniformCenter, Vector3 uniformScale)
         {
-            unitCenter = uniformCenter;
+            //unitCenter = uniformCenter;
             unitScale = uniformScale;
             boardController = _boardController;
 
