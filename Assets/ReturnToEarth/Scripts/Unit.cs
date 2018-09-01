@@ -7,7 +7,6 @@ namespace ReturnToEarth
 {
     public class Unit : MonoBehaviour
     {
-
         public enum Team
         {
             None,
@@ -20,7 +19,7 @@ namespace ReturnToEarth
         private Transform SpriteTransform;
         private SpriteRenderer spriteRenderer;
 
-        //private Block currentBlock;
+        private Block currentBlock;
 
         private void Awake()
         {
@@ -28,11 +27,11 @@ namespace ReturnToEarth
             spriteRenderer = SpriteTransform.GetComponent<SpriteRenderer>();
         }
 
-        public void Initialize(Vector3 unitScale, Sprite sprite,  Block block, Team _team)
+        public void Initialize(Vector3 unitScale, Block block, Team _team)
         {
-            spriteRenderer.sprite = sprite;
-            //currentBlock = block;
-
+            //spriteRenderer.sprite = sprite;
+            currentBlock = block;
+            transform.position = currentBlock.transform.position;
             team = _team;
 
             if(team == Team.Enemy)

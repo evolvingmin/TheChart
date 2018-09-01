@@ -6,26 +6,19 @@ namespace ReturnToEarth
 {
     public class ActorController : MonoBehaviour
     {
-        [SerializeField]
-        private Sprite[] enemySprites;
+        private Dictionary<string, GameObject> loadedPrefabs;
 
-        [SerializeField]
-        private Sprite[] fiendlySprites;
-
-        //private Vector3 unitCenter;
         private Vector3 unitScale;
 
-        [SerializeField]
-        private GameObject baseUnitPrefab;
-
         private BoardController boardController;
+        private ResourceManager resourceManager;
 
-        public GameDefine.Result Initialize(BoardController _boardController, Vector3 uniformCenter, Vector3 uniformScale)
+        public GameDefine.Result Initialize(BoardController _boardController, ResourceManager resourceManager, Vector3 uniformCenter, Vector3 uniformScale)
         {
             //unitCenter = uniformCenter;
             unitScale = uniformScale;
             boardController = _boardController;
-
+            this.resourceManager = resourceManager;
             
 
             return GameDefine.Result.OK;
@@ -33,22 +26,15 @@ namespace ReturnToEarth
 
         // Need Implementation ObjectPool.
 
-        public GameDefine.Result GenerateUnit(int x, int y, Unit.Team team)
+        public GameDefine.Result GenerateUnit(string Type, int x, int y, Unit.Team team)
         {
-            baseUnitPrefab.SetActive(true);
-
-            int spriteMaxSize = team == Unit.Team.Friendly ? fiendlySprites.Length : enemySprites.Length;
-
-            int selectedSpriteIndex = Random.Range(0, spriteMaxSize);
-
-            Sprite selectedSprite = team == Unit.Team.Friendly ? fiendlySprites[selectedSpriteIndex] : enemySprites[selectedSpriteIndex];
-
+            
             Block block = boardController.GetBlock(x, y);
-            GameObject unitObject = Instantiate(baseUnitPrefab, block.transform.position, Quaternion.identity, transform);
+            GameObject unitObject = resourceManager.GetObject<GameObject>("Unit", Type);
+            unitObject.transform.SetParent(transform);
             Unit unit = unitObject.GetComponent<Unit>();
-            unit.Initialize(unitScale, selectedSprite, block, team);
+            unit.Initialize(unitScale, block, team);
 
-            baseUnitPrefab.SetActive(false);
             return GameDefine.Result.OK;
         }
     }
