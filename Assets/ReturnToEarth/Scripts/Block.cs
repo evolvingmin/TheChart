@@ -13,14 +13,11 @@ namespace ReturnToEarth
 
         public Rect Rect { get; private set; }
 
-        private void Awake()
-        {
-            spriteRenderer = GetComponent<SpriteRenderer>();
-        }
-
         public GameDefine.Result Initialize(Vector2 _index, Vector3 _location, Vector3 _scale)
         {
-            index= _index;
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            index = _index;
+            transform.Reset();
             location = _location;
 
             float x = location.x - _scale.x / 2.0f;
@@ -28,6 +25,7 @@ namespace ReturnToEarth
 
             Rect = new Rect(x, y, spriteRenderer.size.x * _scale.x, spriteRenderer.size.y * _scale.y);
 
+            transform.position = location;
             transform.localScale = _scale;
 
             name = "Block(" + index.x + "," + index.y + ")";

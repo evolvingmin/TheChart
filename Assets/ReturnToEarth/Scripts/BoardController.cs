@@ -15,17 +15,16 @@ namespace ReturnToEarth
         private Vector3 blockCenter;
         private Vector3 blockScale;
 
-        [SerializeField]
-        private GameObject blockPrefab;
-
         private List<List<Block>> blocks;
 
-        //private bool isInitializedInEditor = false;
+        private ResourceManager resourceManager;
 
-        public GameDefine.Result Initialize(Vector3 uniformCenter, Vector3 uniformScale)
+        public GameDefine.Result Initialize(ResourceManager resourceManager, Vector3 uniformCenter, Vector3 uniformScale)
         {
             if (width <= 0 || height <= 0)
                 return GameDefine.Result.ERROR_DATA_NOT_IN_PROPER_RANGE;
+
+            this.resourceManager = resourceManager;
 
             blockCenter = uniformCenter;
             blockScale = uniformScale;
@@ -36,20 +35,16 @@ namespace ReturnToEarth
             float currentPosX = startPosX;
             float currentPosY = startPosY;
 
-            blockPrefab.SetActive(true);
             blocks = new List<List<Block>>();
             for (int i = 0; i < height; i++)
             {
                 blocks.Add(new List<Block>());
                 for (int j = 0; j < width; j++)
                 {
-                    GameObject created = Instantiate(
-                        blockPrefab, 
-                        new Vector3(currentPosX, currentPosY, blockCenter.z), 
-                        Quaternion.identity, transform);
-
+                    GameObject created = resourceManager.GetObject<GameObject>("Block", "Base");
                     Block currentBlock = created.GetComponent<Block>();
-                    currentBlock.Initialize(new Vector2(i, j), created.transform.position, blockScale);
+                    currentBlock.Initialize(new Vector2(i, j), new Vector3(currentPosX, currentPosY, blockCenter.z), blockScale);
+                    currentBlock.transform.SetParent(transform);
                     currentPosX += blockScale.x;
 
                     blocks[i].Add(currentBlock);
@@ -57,7 +52,6 @@ namespace ReturnToEarth
                 currentPosY -= blockScale.y;
                 currentPosX = startPosX;
             }
-            blockPrefab.SetActive(false);
 
             return GameDefine.Result.OK;
         }

@@ -54,7 +54,7 @@ namespace ReturnToEarth
         {
             GameDefine.Result results;
             resourceManager.Initialize("Prefabs");
-            results = boardController.Initialize(uniformCenter, UniformScale);
+            results = boardController.Initialize(resourceManager, uniformCenter, UniformScale);
             results = unitController.Initialize(boardController, resourceManager, uniformCenter, UniformScale);
 
             // 개략적인 게임 흐름을 그린다면.
