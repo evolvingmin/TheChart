@@ -41,8 +41,6 @@ namespace ReturnToEarth
 
             SetSpriteRandomly();
         }
-
-
     }
 }
 

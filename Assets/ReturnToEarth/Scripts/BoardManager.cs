@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,18 @@ namespace ReturnToEarth
         private List<List<Block>> blocks;
 
         private ResourceManager resourceManager;
+
+        private Block selectedBlock;
+
+        [SerializeField]
+        private Color[] stateColors;
+        public Color[] StateColors
+        {
+            get
+            {
+                return stateColors;
+            }
+        }
 
         public GameDefine.Result Initialize(ResourceManager resourceManager, Vector3 uniformCenter, Vector3 uniformScale)
         {
@@ -41,9 +54,9 @@ namespace ReturnToEarth
                 blocks.Add(new List<Block>());
                 for (int j = 0; j < width; j++)
                 {
-                    GameObject created = this.resourceManager.GetObject<GameObject>("Block", "Base");
+                    GameObject created = this.resourceManager.GetObject<GameObject>("Block", "Default");
                     Block currentBlock = created.GetComponent<Block>();
-                    currentBlock.Initialize(new Vector2(i, j), new Vector3(currentPosX, currentPosY, blockCenter.z), blockScale);
+                    currentBlock.Initialize(this, new Vector2(i, j), new Vector3(currentPosX, currentPosY, blockCenter.z), blockScale);
                     currentBlock.transform.SetParent(transform);
                     currentPosX += blockScale.x;
 
@@ -54,6 +67,19 @@ namespace ReturnToEarth
             }
 
             return GameDefine.Result.OK;
+        }
+
+        public void SetSelected(Block block)
+        {
+            if(selectedBlock != block)
+            {
+                if(selectedBlock != null)
+                {
+                    selectedBlock.State = Block.BlockState.Default;
+                }
+                selectedBlock = block;
+                selectedBlock.State = Block.BlockState.Selected;
+            }
         }
 
         public GameDefine.Result IsInRange(int x, int y)
