@@ -28,6 +28,10 @@ namespace ReturnToEarth
 
         [SerializeField]
         private ResourceManager resourceManager;
+        public ResourceManager ResourceManager
+        {
+            get { return resourceManager; }
+        }
 
         // Singleton Implementation.
         private static GameManager instance = null;
@@ -76,17 +80,11 @@ namespace ReturnToEarth
             unitManager.GenerateUnit("Base", 3, 2, Team.Opponent);
             unitManager.GenerateUnit("Base", 2, 4, Team.Opponent);
 
-
             unitManager.GenerateUnit("Base", 7, 3, Team.Player);
             unitManager.GenerateUnit("Base", 7, 4, Team.Player);
 
             Debug.Log("GameController Initialized, Result is : " + results);
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
     }
 }
