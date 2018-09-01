@@ -7,6 +7,6 @@ namespace ReturnToEarth
     public struct TurnInfo
     {
         public int count;
-        public Unit.Team team;
+        public GameManager.Team team;
     }
 }

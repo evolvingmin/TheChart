@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace ReturnToEarth
 {
-    public class ActorController : MonoBehaviour
+    public class UnitManager : MonoBehaviour
     {
         private Dictionary<string, GameObject> loadedPrefabs;
 
         private Vector3 unitScale;
 
-        private BoardController boardController;
+        private BoardManager boardController;
         private ResourceManager resourceManager;
 
-        public GameDefine.Result Initialize(BoardController _boardController, ResourceManager resourceManager, Vector3 uniformCenter, Vector3 uniformScale)
+        public GameDefine.Result Initialize(BoardManager _boardController, ResourceManager resourceManager, Vector3 uniformCenter, Vector3 uniformScale)
         {
             //unitCenter = uniformCenter;
             unitScale = uniformScale;
@@ -26,9 +26,8 @@ namespace ReturnToEarth
 
         // Need Implementation ObjectPool.
 
-        public GameDefine.Result GenerateUnit(string Type, int x, int y, Unit.Team team)
+        public GameDefine.Result GenerateUnit(string Type, int x, int y, GameManager.Team team)
         {
-            
             Block block = boardController.GetBlock(x, y);
             GameObject unitObject = resourceManager.GetObject<GameObject>("Unit", Type);
             unitObject.transform.SetParent(transform);

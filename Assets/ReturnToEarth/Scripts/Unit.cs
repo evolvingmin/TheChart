@@ -7,14 +7,7 @@ namespace ReturnToEarth
 {
     public class Unit : MonoBehaviour
     {
-        public enum Team
-        {
-            None,
-            Friendly,
-            Enemy
-        }
-
-        private Team team;
+        private GameManager.Team team;
 
         private Transform SpriteTransform;
         private SpriteRenderer spriteRenderer;
@@ -27,21 +20,29 @@ namespace ReturnToEarth
             spriteRenderer = SpriteTransform.GetComponent<SpriteRenderer>();
         }
 
-        public void Initialize(Vector3 unitScale, Block block, Team _team)
+        //임시로 작성됨.
+        private void SetSpriteRandomly()
         {
-            //spriteRenderer.sprite = sprite;
+
+        }
+
+        public void Initialize(Vector3 unitScale, Block block, GameManager.Team team)
+        {
             currentBlock = block;
             transform.position = currentBlock.transform.position;
-            team = _team;
+            this.team = team;
 
-            if(team == Team.Enemy)
+            if(this.team == GameManager.Team.Opponent)
             {
                 transform.Rotate(0, 0, 180.0f);
             }
+
             SpriteTransform.transform.localScale = unitScale;
 
-            //Debug.Log("Unit Was Initialized, " + currentBlock);
+            SetSpriteRandomly();
         }
+
+
     }
 }
 

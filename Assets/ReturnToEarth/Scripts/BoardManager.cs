@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ReturnToEarth
 {
-    public class BoardController : MonoBehaviour
+    public class BoardManager : MonoBehaviour
     {
         [SerializeField]
         private int width = 5;
@@ -41,7 +41,7 @@ namespace ReturnToEarth
                 blocks.Add(new List<Block>());
                 for (int j = 0; j < width; j++)
                 {
-                    GameObject created = resourceManager.GetObject<GameObject>("Block", "Base");
+                    GameObject created = this.resourceManager.GetObject<GameObject>("Block", "Base");
                     Block currentBlock = created.GetComponent<Block>();
                     currentBlock.Initialize(new Vector2(i, j), new Vector3(currentPosX, currentPosY, blockCenter.z), blockScale);
                     currentBlock.transform.SetParent(transform);
@@ -78,8 +78,8 @@ namespace ReturnToEarth
 
         private void OnDrawGizmosSelected()
         {
-            blockCenter = GameController.Instance.UniformCenter;
-            blockScale = GameController.Instance.UniformScale;
+            blockCenter = GameManager.Instance.UniformCenter;
+            blockScale = GameManager.Instance.UniformScale;
 
             float startPosX = ( blockCenter.x - (  ( blockScale.x * width ) / 2.0f ));
             float startPosY = ( blockCenter.y + (  ( blockScale.y * height ) / 2.0f ));

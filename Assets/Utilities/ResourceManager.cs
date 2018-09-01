@@ -160,6 +160,4 @@ public class ResourceManager : MonoBehaviour {
     {
         return Instantiate<UnityEngine.Object>(prefab);
     }
-
-
 }

@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 51610963}
   - component: {fileID: 51610964}
   m_Layer: 0
-  m_Name: GameController
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,8 +160,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniformScale: {x: 3, y: 3, z: 1}
   uniformCenter: {x: 0, y: 1, z: 0}
-  boardController: {fileID: 118015089}
-  unitController: {fileID: 93758597}
+  boardManager: {fileID: 118015089}
+  unitManager: {fileID: 93758597}
   resourceManager: {fileID: 1802035244}
 --- !u!1 &93758595
 GameObject:
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 93758596}
   - component: {fileID: 93758597}
   m_Layer: 0
-  m_Name: UnitController
+  m_Name: UnitManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 118015088}
   - component: {fileID: 118015089}
   m_Layer: 0
-  m_Name: BoardController
+  m_Name: BoardManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,7 +254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 121492458}
   m_Layer: 0
-  m_Name: BackGroundController
+  m_Name: BackGround(Test)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -746,7 +746,7 @@ GameObject:
   m_Component:
   - component: {fileID: 892583399}
   m_Layer: 0
-  m_Name: InputController
+  m_Name: InputManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
