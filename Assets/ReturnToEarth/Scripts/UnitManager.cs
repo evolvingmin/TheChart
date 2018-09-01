@@ -24,8 +24,6 @@ namespace ReturnToEarth
             return GameDefine.Result.OK;
         }
 
-        // Need Implementation ObjectPool.
-
         public GameDefine.Result GenerateUnit(string Type, int x, int y, GameManager.Team team)
         {
             Block block = boardController.GetBlock(x, y);

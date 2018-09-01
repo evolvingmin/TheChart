@@ -56,7 +56,7 @@ namespace ReturnToEarth
                 {
                     GameObject created = this.resourceManager.GetObject<GameObject>("Block", "Default");
                     Block currentBlock = created.GetComponent<Block>();
-                    currentBlock.Initialize(this, new Vector2(i, j), new Vector3(currentPosX, currentPosY, blockCenter.z), blockScale);
+                    currentBlock.Initialize(this, new Vector2(j, i), new Vector3(currentPosX, currentPosY, blockCenter.z), blockScale);
                     currentBlock.transform.SetParent(transform);
                     currentPosX += blockScale.x;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,10 +9,11 @@ namespace ReturnToEarth
     public class Block : MonoBehaviour
     {
         public enum BlockState
-        {
+        { 
             Default,
             Over,
-            Selected
+            Selected,
+            None
         }
 
         private BoardManager boardManager;
@@ -22,8 +24,10 @@ namespace ReturnToEarth
         private Image image;
 
         public Rect Rect { get; private set; }
-        private BlockState state;
+        private BlockState state = BlockState.None;
 
+
+        private Unit placed;
         public BlockState State
         {
             get
@@ -63,14 +67,19 @@ namespace ReturnToEarth
 
             name = "Block(" + index.x + "," + index.y + ")";
 
-            state = BlockState.Default;
+            State = BlockState.Default;
 
             return GameDefine.Result.OK;
         }
 
+        public void PlaceUnit(Unit unit)
+        {
+            placed = unit;
+        }
+
         public override string ToString()
         {
-            return name;
+            return state.ToString() + name;
         }
 
         public void OnPointerEnter()
@@ -90,8 +99,8 @@ namespace ReturnToEarth
 
         public void OnPointerClick()
         {
-            UpdateState(BlockState.Selected);
             boardManager.SetSelected(this);
+            Debug.Log(ToString());
         }
 
         private void UpdateState(BlockState newState)
@@ -102,6 +111,11 @@ namespace ReturnToEarth
             state = newState;
             Color nextColor = boardManager.StateColors[(int)state];
             image.color = nextColor;
+
+            if (placed == null)
+                return;
+
+            placed.UpdateState(state);
         }
     }
 

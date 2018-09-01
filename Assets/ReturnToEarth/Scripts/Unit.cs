@@ -7,6 +7,16 @@ namespace ReturnToEarth
 {
     public class Unit : MonoBehaviour
     {
+        public enum UnitState
+        {
+            Idle,
+            Selected,
+            Moving,
+            Attack,
+            Dead,
+            None
+        }
+
         private GameManager.Team team;
 
         private Transform SpriteTransform;
@@ -14,16 +24,12 @@ namespace ReturnToEarth
 
         private Block currentBlock;
 
+        private UnitState state = UnitState.None;
+
         private void Awake()
         {
             SpriteTransform = gameObject.transform.GetChild(0);
             spriteRenderer = SpriteTransform.GetComponent<SpriteRenderer>();
-        }
-
-        //임시로 작성됨.
-        private void SetSpriteRandomly()
-        {
-
         }
 
         public void Initialize(Vector3 unitScale, Block block, GameManager.Team team)
@@ -34,12 +40,46 @@ namespace ReturnToEarth
 
             if(this.team == GameManager.Team.Opponent)
             {
-                transform.Rotate(0, 0, 180.0f);
+                transform.LookAt(transform.position + Vector3.down, Vector3.back);
+                spriteRenderer.color = Color.blue;
+            }
+            else
+            {
+                transform.LookAt(transform.position + Vector3.up, Vector3.back);
             }
 
             SpriteTransform.transform.localScale = unitScale;
 
-            SetSpriteRandomly();
+            state = UnitState.Idle;
+            currentBlock.PlaceUnit(this);
+
+        }
+
+        public void UpdateState(Block.BlockState state)
+        {
+            if (team == GameManager.Team.Opponent)
+                return;
+
+            if(state == Block.BlockState.Selected)
+            {
+                this.state = UnitState.Selected;
+            }
+            else if ( state == Block.BlockState.Default )
+            {
+                this.state = UnitState.Idle;
+            }
+        }
+
+        private void Update()
+        {
+            switch (state)
+            {
+                case UnitState.Selected:
+                    Vector3 MousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    MousePoint.z = transform.position.z;
+                    transform.LookAt(MousePoint, Vector3.back);
+                    break;
+            }
         }
     }
 }
