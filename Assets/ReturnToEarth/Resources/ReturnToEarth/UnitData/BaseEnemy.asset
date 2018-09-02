@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc90955bbe5eb844bbff32a2efda1ca7, type: 3}
   m_Name: BaseEnemy
   m_EditorClassIdentifier: 
-  Image: {fileID: 0}
-  bulletName: 
+  Image: {fileID: 21300000, guid: e0813a246a3703f47bae70d83dd8f448, type: 3}
+  bulletName: Base

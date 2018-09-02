@@ -96,7 +96,7 @@ namespace ReturnToEarth
         {
             if(IsInRange(x,y) == Define.Result.OK)
             {
-                return blocks[x][y];
+                return blocks[y][x];
             }
 
             return null;

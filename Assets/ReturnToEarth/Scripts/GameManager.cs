@@ -88,8 +88,8 @@ namespace ReturnToEarth
             unitManager.GenerateUnit("Base", "BaseEnemy", 3, 2, Team.Opponent);
             unitManager.GenerateUnit("Base", "BaseEnemy", 2, 4, Team.Opponent);
 
-            unitManager.GenerateUnit("Base", "BasePlayer", 7, 3, Team.Player);
-            unitManager.GenerateUnit("Base", "BasePlayer", 7, 4, Team.Player);
+            unitManager.GenerateUnit("Base", "BasePlayer", 3, 7, Team.Player);
+            unitManager.GenerateUnit("Base", "BasePlayer", 4, 7, Team.Player);
 
             Debug.Log("GameController Initialized, Result is : " + results);
         }
