@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class UnityObjectPool
 {
     private string name;
     private UnityEngine.Object basePrefab;
-    private Stack<UnityEngine.Object> loaded;
     private Stack<UnityEngine.Object> available;
 
-    // 리소스 메니져는 나중에 ini나 다른 파일과 연동하여
-    // 해당 ObjectPool 의 baseSize를 조절 할 수 있도록 하겠다.
-    private int baseSize = 10; 
+    // todo : 리소스 메니져는 나중에 ini나 다른 파일과 연동하여 해당 ObjectPool 의 baseSize를 조절 할 수 있도록 하겠다.
+    private int baseSize = 10;
+    private int currentSize = 0;
 
     private ResourceManager resourceManager;
-    private UnityObjectCollection unityObjectCollection;
 
-    public UnityObjectPool(string name, UnityEngine.Object basePrefab, ResourceManager resourceManager, UnityObjectCollection unityObjectCollection)
+    public UnityObjectPool(string name, UnityEngine.Object basePrefab, ResourceManager resourceManager)
     {
         this.basePrefab = basePrefab;
         this.name = name;
         this.resourceManager = resourceManager;
-        this.unityObjectCollection = unityObjectCollection;
 
-        loaded = new Stack<UnityEngine.Object>();
         available = new Stack<UnityEngine.Object>();
 
         SpawnUptoBaseSize();
@@ -41,7 +38,8 @@ public class UnityObjectPool
         for (int i = 0; i < baseSize; i++)
         {
             UnityEngine.Object spawned = resourceManager.Spawn(basePrefab);
-            if(spawned is GameObject)
+            spawned.name = name;
+            if (spawned is GameObject)
             {
                 GameObject current = (GameObject)spawned;
                 current.SetActive(false);
@@ -49,6 +47,7 @@ public class UnityObjectPool
             }
             available.Push(spawned);
         }
+        currentSize = baseSize;
     }
 
     public UnityEngine.Object GetAvailableObject()
@@ -67,12 +66,10 @@ public class UnityObjectPool
         }
         else
         {
-            int baseSize = Mathf.Max(1, loaded.Count);
+            int baseSize = Mathf.Max(1, currentSize);
             IncreaseSizeBy(baseSize / 2);
             result = available.Pop();
         }
-
-        loaded.Push(result);
 
         if (result is GameObject)
         {
@@ -87,7 +84,7 @@ public class UnityObjectPool
         for(int i =0; i< amount; i++)
         {
             UnityEngine.Object spawned = resourceManager.Spawn(basePrefab);
-
+            spawned.name = name;
             if (spawned is GameObject)
             {
                 GameObject current = (GameObject)spawned;
@@ -97,6 +94,22 @@ public class UnityObjectPool
 
             available.Push(spawned);
         }
+        currentSize += amount;
+    }
+
+    public Define.Result CollectGameObject(GameObject collected)
+    {
+        collected.SetActive(false);
+        collected.transform.SetParent(resourceManager.transform);
+        available.Push(collected);
+
+        return Define.Result.OK;
+    }
+
+    public override string ToString()
+    {
+        int used = currentSize - available.Count;
+        return string.Format("[{0} : ({1}/{2})]", name, used, currentSize);
     }
 }
 
@@ -119,11 +132,35 @@ public class UnityObjectCollection
         {
             string TargetPath = string.Format("{0}/{1}/{2}", resourceManager.RootPath, category, prefabName);
             T basePrefab = (T)Resources.Load(TargetPath);
-            pools.Add(prefabName, new UnityObjectPool(prefabName, basePrefab, resourceManager,this));
+            pools.Add(prefabName, new UnityObjectPool(prefabName, basePrefab, resourceManager));
         }
         UnityObjectPool targetObjectPool = pools[prefabName];
 
         return (T)targetObjectPool.GetAvailableObject();
+    }
+
+    public Define.Result CollectGameObject(GameObject collected)
+    {
+        if (!pools.ContainsKey(collected.name))
+        {
+            return Define.Result.NOT_INITIALIZED;
+        }
+
+        return pools[collected.name].CollectGameObject(collected);
+    }
+
+    public override string ToString()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.Append(string.Format("<{0}>", category));
+        stringBuilder.AppendLine();
+        foreach (var item in pools)
+        {
+            stringBuilder.Append(item.Value);
+            stringBuilder.AppendLine();
+        }
+        return stringBuilder.ToString();
     }
 }
 
@@ -136,15 +173,15 @@ public class ResourceManager : MonoBehaviour {
     public string RootPath {  get { return rootPath; } }
     private string rootPath = "Prefabs";
 
-    public bool Initialize(string rootPath = "Prefabs")
+    public Define.Result Initialize(string rootPath = "Prefabs")
     {
         this.rootPath = rootPath;
         collections = new Dictionary<string, UnityObjectCollection>();
 
-        return true;
+        return Define.Result.OK;
     }
 
-    public T GetObject<T>(string category, string PrefabName) where T : UnityEngine.Object
+    public T SpawnObject<T>(string category, string PrefabName) where T : UnityEngine.Object
     {
         if(!collections.ContainsKey(category))
         {
@@ -159,5 +196,32 @@ public class ResourceManager : MonoBehaviour {
     public UnityEngine.Object Spawn(UnityEngine.Object prefab)
     {
         return Instantiate<UnityEngine.Object>(prefab);
+    }
+
+    public Define.Result CollectGameObject(string resourceCategory, GameObject collected)
+    {
+        if(!collections.ContainsKey(resourceCategory))
+        {
+            return Define.Result.NOT_INITIALIZED;
+        }
+
+        return collections[resourceCategory].CollectGameObject(collected);
+    }
+
+    public override string ToString()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        foreach (var collection in collections)
+        {
+            stringBuilder.Append(collection.Value);
+            stringBuilder.AppendLine();
+        }
+        return stringBuilder.ToString();
+    }
+
+    public void ShowCurrentObjects()
+    {
+        Debug.Log(ToString());
     }
 }

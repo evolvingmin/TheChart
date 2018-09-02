@@ -49,7 +49,7 @@ namespace ReturnToEarth
             rectTransform = GetComponent<RectTransform>();
         }
 
-        public GameDefine.Result Initialize(BoardManager boardManager, Vector2 _index, Vector3 _location, Vector3 _scale)
+        public Define.Result Initialize(BoardManager boardManager, Vector2 _index, Vector3 _location, Vector3 _scale)
         {
             this.boardManager = boardManager;
             image = GetComponent<Image>();
@@ -65,11 +65,9 @@ namespace ReturnToEarth
             transform.position = location;
             transform.localScale = _scale;
 
-            name = "Block(" + index.x + "," + index.y + ")";
-
             State = BlockState.Default;
 
-            return GameDefine.Result.OK;
+            return Define.Result.OK;
         }
 
         public void PlaceUnit(Unit unit)
@@ -79,7 +77,7 @@ namespace ReturnToEarth
 
         public override string ToString()
         {
-            return state.ToString() + name;
+            return string.Format("{0} [{1}] ({2},{3})", name, state, index.x, index.y);
         }
 
         public void OnPointerEnter()

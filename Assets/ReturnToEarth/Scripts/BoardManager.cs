@@ -32,10 +32,10 @@ namespace ReturnToEarth
             }
         }
 
-        public GameDefine.Result Initialize(ResourceManager resourceManager, Vector3 uniformCenter, Vector3 uniformScale)
+        public Define.Result Initialize(ResourceManager resourceManager, Vector3 uniformCenter, Vector3 uniformScale)
         {
             if (width <= 0 || height <= 0)
-                return GameDefine.Result.ERROR_DATA_NOT_IN_PROPER_RANGE;
+                return Define.Result.ERROR_DATA_NOT_IN_PROPER_RANGE;
 
             this.resourceManager = resourceManager;
 
@@ -54,7 +54,7 @@ namespace ReturnToEarth
                 blocks.Add(new List<Block>());
                 for (int j = 0; j < width; j++)
                 {
-                    GameObject created = this.resourceManager.GetObject<GameObject>("Block", "Default");
+                    GameObject created = this.resourceManager.SpawnObject<GameObject>("Block", "Default");
                     Block currentBlock = created.GetComponent<Block>();
                     currentBlock.Initialize(this, new Vector2(j, i), new Vector3(currentPosX, currentPosY, blockCenter.z), blockScale);
                     currentBlock.transform.SetParent(transform);
@@ -66,7 +66,7 @@ namespace ReturnToEarth
                 currentPosX = startPosX;
             }
 
-            return GameDefine.Result.OK;
+            return Define.Result.OK;
         }
 
         public void SetSelected(Block block)
@@ -82,19 +82,19 @@ namespace ReturnToEarth
             }
         }
 
-        public GameDefine.Result IsInRange(int x, int y)
+        public Define.Result IsInRange(int x, int y)
         {
             bool condition = ( x < width && y < height ) && ( x >= 0 && y >= 0 );
 
             if (condition == false)
-                return GameDefine.Result.ERROR_DATA_NOT_IN_PROPER_RANGE;
+                return Define.Result.ERROR_DATA_NOT_IN_PROPER_RANGE;
 
-            return GameDefine.Result.OK;
+            return Define.Result.OK;
         }
 
         public Block GetBlock(int x, int y)
         {
-            if(IsInRange(x,y) == GameDefine.Result.OK)
+            if(IsInRange(x,y) == Define.Result.OK)
             {
                 return blocks[x][y];
             }

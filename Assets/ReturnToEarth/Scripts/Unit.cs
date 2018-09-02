@@ -18,6 +18,7 @@ namespace ReturnToEarth
         }
 
         private GameManager.Team team;
+        private BulletManager bulletManager;
 
         private Transform SpriteTransform;
         private SpriteRenderer spriteRenderer;
@@ -39,7 +40,7 @@ namespace ReturnToEarth
             SpriteTransform = gameObject.transform.GetChild(0);
             spriteRenderer = SpriteTransform.GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
-            
+            bulletManager = GameManager.Instance.BulletManager;
         }
 
         private void GenerateAnimatorNameState()
@@ -73,7 +74,6 @@ namespace ReturnToEarth
             SpriteTransform.transform.localScale = unitScale;
 
             state = UnitState.Idle;
-            name = name.Replace("(Clone)", "");
             GenerateAnimatorNameState();
             currentBlock.PlaceUnit(this);
         }
@@ -107,7 +107,6 @@ namespace ReturnToEarth
             {
                 case UnitState.Selected:
                     LookAtMouse();
-                    
                     break;
             }
         }
@@ -138,14 +137,15 @@ namespace ReturnToEarth
         {
             cachedTarget = Target;
             animator.SetTrigger("Attack");
+            Vector3 Forward = cachedTarget - transform.position;
+            bulletManager.Fire(this, bullet, transform.position, Forward.normalized);
+
         }
 
         private void EventFire()
         {
-            var bulletObject = GameManager.Instance.ResourceManager.GetObject<GameObject>("Bullet", bullet);
-            Vector3 Forward = cachedTarget - transform.position;
-
-            bulletObject.GetComponent<Bullet>().Fire(transform.position, Forward.normalized);
+            //Vector3 Forward = cachedTarget - transform.position;
+            //bulletManager.Fire(this, bullet, transform.position, Forward.normalized);
         }
     }
 }

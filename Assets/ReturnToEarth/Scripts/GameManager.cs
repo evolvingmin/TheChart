@@ -33,6 +33,13 @@ namespace ReturnToEarth
             get { return resourceManager; }
         }
 
+        [SerializeField]
+        private BulletManager bulletManager;
+        public BulletManager BulletManager
+        {
+            get { return bulletManager; }
+        }
+
         // Singleton Implementation.
         private static GameManager instance = null;
         public static GameManager Instance
@@ -63,8 +70,9 @@ namespace ReturnToEarth
 
         private void Awake()
         {
-            GameDefine.Result results;
-            resourceManager.Initialize("ReturnToEarth");
+            Define.Result results;
+            results = resourceManager.Initialize("ReturnToEarth");
+            results = bulletManager.Initialize(resourceManager);
             results = boardManager.Initialize(resourceManager, uniformCenter, UniformScale);
             results = unitManager.Initialize(boardManager, resourceManager, uniformCenter, UniformScale);
 

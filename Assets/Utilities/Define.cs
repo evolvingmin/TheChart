@@ -1,5 +1,5 @@
 ﻿
-public static class GameDefine  {
+public static class Define  {
 
 	public enum Result
     {

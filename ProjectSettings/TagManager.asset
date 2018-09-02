@@ -47,10 +47,10 @@ TagManager:
   - name: BackGround
     uniqueID: 535781827
     locked: 0
-  - name: Unit
+  - name: Bullet
     uniqueID: 1453511365
     locked: 0
-  - name: Bullet
+  - name: Unit
     uniqueID: 2369713919
     locked: 0
   - name: Weapon
