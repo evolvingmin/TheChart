@@ -14,6 +14,8 @@ public class UnityObjectPool
     private int baseSize = 10;
     private int currentSize = 0;
 
+    // 오브젝트 풀은 현재 GameObject 대상으로만 지원한다.
+    private bool bSupportObjectPool = false;
     private ResourceManager resourceManager;
 
     public UnityObjectPool(string name, UnityEngine.Object basePrefab, ResourceManager resourceManager)
@@ -24,6 +26,8 @@ public class UnityObjectPool
 
         available = new Stack<UnityEngine.Object>();
 
+        bSupportObjectPool = basePrefab is GameObject;
+
         SpawnUptoBaseSize();
     }
 
@@ -32,6 +36,12 @@ public class UnityObjectPool
         if (basePrefab == null)
         {
             Debug.LogWarning("basePrefab was not Loaded, name : " + name);
+            return;
+        }
+
+        if(bSupportObjectPool == false)
+        {
+            currentSize = 1;
             return;
         }
 
@@ -57,6 +67,9 @@ public class UnityObjectPool
             Debug.LogWarning("basePrefab was not Loaded, name : " + name);
             return null;
         }
+
+        if (bSupportObjectPool == false)
+            return basePrefab;
 
         UnityEngine.Object result = null;
 
@@ -157,8 +170,7 @@ public class UnityObjectCollection
         stringBuilder.AppendLine();
         foreach (var item in pools)
         {
-            stringBuilder.Append(item.Value);
-            stringBuilder.AppendLine();
+            stringBuilder.AppendLine(item.Value.ToString());
         }
         return stringBuilder.ToString();
     }
@@ -181,7 +193,7 @@ public class ResourceManager : MonoBehaviour {
         return Define.Result.OK;
     }
 
-    public T SpawnObject<T>(string category, string PrefabName) where T : UnityEngine.Object
+    public T GetObject<T>(string category, string PrefabName) where T : UnityEngine.Object
     {
         if(!collections.ContainsKey(category))
         {
@@ -212,10 +224,10 @@ public class ResourceManager : MonoBehaviour {
     {
         StringBuilder stringBuilder = new StringBuilder();
 
+        stringBuilder.AppendLine("Object Report has Generate, Click a log for details.");
         foreach (var collection in collections)
         {
-            stringBuilder.Append(collection.Value);
-            stringBuilder.AppendLine();
+            stringBuilder.AppendLine(collection.Value.ToString());
         }
         return stringBuilder.ToString();
     }

@@ -30,8 +30,9 @@ namespace ReturnToEarth
         private UnitState state = UnitState.None;
 
         // 이 정보 역시 ScriptTableObject에서 와야 한다.
-        private string bullet = "Default";
         private string prefix = "Unit_";
+
+        private UnitData unitData;
 
         private Dictionary<UnitState, string> animStrings;
 
@@ -55,22 +56,24 @@ namespace ReturnToEarth
             }
         }
 
-        public void Initialize(Vector3 unitScale, Block block, GameManager.Team team)
+        public void Initialize(string data, Vector3 unitScale, Block block, GameManager.Team team)
         {
             currentBlock = block;
             transform.position = currentBlock.transform.position;
             this.team = team;
 
-            if(this.team == GameManager.Team.Opponent)
+            unitData = GameManager.Instance.ResourceManager.GetObject<UnitData>("UnitData", data);
+
+            if (this.team == GameManager.Team.Opponent)
             {
                 LookAtDown();
-                spriteRenderer.color = Color.green;
             }
             else
             {
                 LookAtUp();
             }
 
+            spriteRenderer.sprite = unitData.Image;
             SpriteTransform.transform.localScale = unitScale;
 
             state = UnitState.Idle;
@@ -138,8 +141,7 @@ namespace ReturnToEarth
             cachedTarget = Target;
             animator.SetTrigger("Attack");
             Vector3 Forward = cachedTarget - transform.position;
-            bulletManager.Fire(this, bullet, transform.position, Forward.normalized);
-
+            bulletManager.Fire(this, unitData.bulletName, transform.position, Forward.normalized);
         }
 
         private void EventFire()

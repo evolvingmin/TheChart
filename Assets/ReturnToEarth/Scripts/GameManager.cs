@@ -82,14 +82,14 @@ namespace ReturnToEarth
             // 해당 데이터를 엑터 컨트롤러에서 생성하도록 한다.
             // 레벨 디자인이 있는 셈 치고 테스트 코드 형식으로 넣도록 하자.
 
-            unitManager.GenerateUnit("Base", 0, 0, Team.Opponent);
-            unitManager.GenerateUnit("Base", 1, 1, Team.Opponent);
-            unitManager.GenerateUnit("Base", 2, 2, Team.Opponent);
-            unitManager.GenerateUnit("Base", 3, 2, Team.Opponent);
-            unitManager.GenerateUnit("Base", 2, 4, Team.Opponent);
+            unitManager.GenerateUnit("Base", "BaseEnemy", 0, 0, Team.Opponent);
+            unitManager.GenerateUnit("Base", "BaseEnemy", 1, 1, Team.Opponent);
+            unitManager.GenerateUnit("Base", "BaseEnemy", 2, 2, Team.Opponent);
+            unitManager.GenerateUnit("Base", "BaseEnemy", 3, 2, Team.Opponent);
+            unitManager.GenerateUnit("Base", "BaseEnemy", 2, 4, Team.Opponent);
 
-            unitManager.GenerateUnit("Base", 7, 3, Team.Player);
-            unitManager.GenerateUnit("Base", 7, 4, Team.Player);
+            unitManager.GenerateUnit("Base", "BasePlayer", 7, 3, Team.Player);
+            unitManager.GenerateUnit("Base", "BasePlayer", 7, 4, Team.Player);
 
             Debug.Log("GameController Initialized, Result is : " + results);
         }

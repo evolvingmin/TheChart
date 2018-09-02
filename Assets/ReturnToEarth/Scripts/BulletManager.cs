@@ -18,7 +18,7 @@ public class BulletManager : MonoBehaviour {
 
     public void Fire(Unit unit, string bullet, Vector3 firePosition, Vector3 normalized)
     {
-        GameObject bulletObject = resourceManager.SpawnObject<GameObject>(resourceCategory, bullet);
+        GameObject bulletObject = resourceManager.GetObject<GameObject>(resourceCategory, bullet);
         bulletObject.transform.SetParent(transform);
 
         bulletObject.GetComponent<Bullet>().Fire(firePosition, normalized);
