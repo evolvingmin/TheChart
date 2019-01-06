@@ -1,9 +1,0 @@
-fileFormatVersion: 2
-guid: e48a1809b3c63b84ba8b5902b3a8d51e
-timeCreated: 1456471664
-licenseType: Free
-TextScriptImporter:
-  userData: <?xml version="1.0" encoding="utf-16"?><CSVMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"><columns><string>Year</string><string>Make</string><string>Model</string><string>Description</string><string>Price</string></columns><columnTypes><string>string</string><string>string</string><string>string</string><string>string</string><string>string</string></columnTypes><isStatic>false</isStatic><staticCsvPath>Assets/CSV2TablePro/Demo/Demo</staticCsvPath><generatedScriptPath>Assets/CSV2TablePro/Demo/DemoTable.cs</generatedScriptPath></CSVMetaData>
-  assetBundleName: 
-  assetBundleVariant: 
