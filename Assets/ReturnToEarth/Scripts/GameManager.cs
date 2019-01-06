@@ -4,6 +4,15 @@ using UnityEngine;
 
 namespace ReturnToEarth
 {
+    // Im pretty sure I have focus issue to keep fail to continue project for helping myself. 
+    // by making public project and i hope this will be the daily, or at least weekly task for me to keep motivating to make something just seeting in the home alone do nothing. so has to be this is my motivation box.
+
+    // At least, I will be chatty in this small open place will nobody visited in here.
+
+    // and At least, Hope someday person like me also can make some stady ground for jumping for the next step, like getting happiness or making place for feels alive. 
+
+    // I hope so...
+
     public class GameManager : MonoBehaviour
     {
         public enum Team
