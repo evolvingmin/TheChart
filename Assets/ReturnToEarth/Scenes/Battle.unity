@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniformScale: {x: 3, y: 3, z: 1}
-  uniformCenter: {x: 0, y: 1, z: 0}
+  uniformCenter: {x: 0, y: 0, z: 0}
   boardManager: {fileID: 118015089}
   unitManager: {fileID: 93758597}
   resourceManager: {fileID: 1802035244}
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f988aa23941b741940bfa56c98f6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 5
+  width: 8
   height: 8
   stateColors:
   - {r: 1, g: 1, b: 1, a: 0.32941177}

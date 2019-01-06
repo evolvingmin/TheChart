@@ -224,7 +224,7 @@ public class ResourceManager : MonoBehaviour {
     {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.AppendLine("Object Report has Generate, Click a log for details.");
+        stringBuilder.AppendLine("Object report has generated, Click a log for details.");
         foreach (var collection in collections)
         {
             stringBuilder.AppendLine(collection.Value.ToString());

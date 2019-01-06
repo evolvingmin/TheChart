@@ -140,14 +140,12 @@ namespace ReturnToEarth
         {
             cachedTarget = Target;
             animator.SetTrigger("Attack");
-            Vector3 Forward = cachedTarget - transform.position;
-            bulletManager.Fire(this, unitData.bulletName, transform.position, Forward.normalized);
         }
 
         private void EventFire()
         {
-            //Vector3 Forward = cachedTarget - transform.position;
-            //bulletManager.Fire(this, bullet, transform.position, Forward.normalized);
+            Vector3 Forward = cachedTarget - transform.position;
+            bulletManager.Fire(this, unitData.bulletName, transform.position, Forward.normalized);
         }
     }
 }
