@@ -130,7 +130,7 @@ namespace ReturnToEarth
             MousePoint.z = transform.position.z;
             transform.LookAt(MousePoint, Vector3.back);
 
-            Fire(MousePoint);
+            //Fire(MousePoint);
         }
 
         // 현재 테스트 코드. 정상 플로우가 아니라 총알을 쏘고 회수하는 로직 확인을 위해 우선 개발 해 보도록 한다.

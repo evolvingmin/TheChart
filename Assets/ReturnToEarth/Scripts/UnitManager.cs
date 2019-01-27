@@ -19,7 +19,6 @@ namespace ReturnToEarth
             unitScale = uniformScale;
             boardController = _boardController;
             this.resourceManager = resourceManager;
-            
 
             return Define.Result.OK;
         }
