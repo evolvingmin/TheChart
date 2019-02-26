@@ -1,8 +1,0 @@
-i_index,s_name,s_weapontype,s_bullettype,i_damage_SB,i_damage_SR,f_accuracy_SB,f_accuracy_SR,f_attackspeed_SB,f_attackduration_SB,i_initialbullet_SB,i_initialbullet_SR,i_magazine_SB,i_magazine_SR,f_makemagazine_SB,f_criticalrate_SB,f_criticalrate_SR,i_bulletspeed_SB,s_attacktarget,s_area,i_multiple,i_maxdurability_SB,i_maxdurability_SR,s_card,i_cost_SB,i_cost_SR,s_icon,s_targetprefab
-1,high_explosion_missile,missile,missile,"50,100",15,90,9.5,0.6,0,4,1,1,1,5.3,30,3,30,far,area,2,"1,1",1,dummycard,10,-1,missile_turret,high_explosion_missile
-2,explosion_missile,missile,missile,"60,110",13,100,10,0.6,0,1,1,1,1,4.5,30,3,30,far,area,1,"1,5",1,dummycard,15,-1,missile_turret,explosion_missile
-3,lotto_laser,laser,laser,"20,100",12,70,15,0.45,1.5,0,0,0,0,0,20,2,50,middle,normal,1,"6,9",1,dummycard,20,-1,laser_turret,lotto_laser
-4,rifle,mass,mass,"10,15",2,30,1.1,0.15,0,40,4,-1,0,3,10,1,20,near,normal,1,"4,8",1,dummycard,20,-1,mass_turret,rifle
-5,pickpick_laser,laser,laser,"40,40",4,50,7.5,0.5,2,0,0,0,0,0,5,0.5,20,near,normal,1,"1,5",1,dummycard,10,-1,laser_turret,pickpick_laser
-6,havey_mass,mass,mass,"20,30",5,90,9,0.3,0,30,3,-1,0,4,10,1,30,far,area,3,"2,9",1,dummycard,15,-1,mass_turret,havey_mass
-7,rapid_missile,missile,missile,"20,30",5,95,10,1.2,0,6,1,2,1,5,20,2,50,middle,normal,1,"1,10",1,dummycard,15,-1,missile_turret,rapid_missile

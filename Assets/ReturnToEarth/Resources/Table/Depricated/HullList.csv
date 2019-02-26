@@ -1,6 +1,0 @@
-i_index,s_name,i_defense,i_weaponslot,i_hangerslot,i_utilityslots,i_hp,i_avoid_rate,s_icon,s_targetprefab,b_Owned,s_type
-1,Enterprise_Class,"10,20",3,0,2,"200,300","3,5",Enterprise_Class,Enterprise_Class,0,0
-2,Admiral_Lee_Class,"20,30",4,0,1,"210,310","5,8",Admiral_Lee_Class,Admiral_Lee_Class,1,0
-3,Sejong_The_Great_Class,"30,40",5,0,0,"220,320","2,5",Sejong_The_Great_Class,Sejong_The_Great_Class,1,0
-4,Ticonderoga_Class,"40,50",2,0,5,"230,330","3,8",Ticonderoga_Class,Ticonderoga_Class,1,0
-5,Arleigh_Burke_Class,"50,60",3,0,4,"240,340","3,6",Arleigh_Burke_Class,Arleigh_Burke_Class,0,0

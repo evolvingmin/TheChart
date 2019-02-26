@@ -1,9 +1,0 @@
-fileFormatVersion: 2
-guid: 3ebef02b06c38ac4f81d984474cbc8b9
-timeCreated: 1502977189
-licenseType: Free
-TextScriptImporter:
-  userData: <?xml version="1.0" encoding="utf-16"?><CSVMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"><columns><string>index</string><string>name</string><string>damage</string><string>attack_range</string><string>attackspeed</string><string>magazine</string><string>hp</string><string>avoid_rate</string></columns><columnTypes><string>int</string><string>bool</string><string>bool</string><string>bool</string><string>bool</string><string>bool</string><string>bool</string><string>bool</string></columnTypes><isNameType>true</isNameType><isStatic>true</isStatic><staticCsvPath>Table/UtilityList</staticCsvPath><generatedScriptPath>Assets/StarShip/Scripts/Table/UtilityListTable.cs</generatedScriptPath></CSVMetaData>
-  assetBundleName: 
-  assetBundleVariant: 
