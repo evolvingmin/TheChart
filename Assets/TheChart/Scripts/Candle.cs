@@ -39,7 +39,15 @@ public class Candle : MonoBehaviour
     {
         get
         {
-            return data.end > data.open;
+            return CandleData.end > CandleData.open;
+        }
+    }
+
+    public Data CandleData
+    {
+        get
+        {
+            return data;
         }
     }
 
@@ -48,7 +56,7 @@ public class Candle : MonoBehaviour
         if (state == State.None)
             return;
 
-        UpdateVisualization(data);
+        UpdateVisualization(CandleData);
     }
 
     public Define.Result Init(Chart chart)
@@ -65,29 +73,29 @@ public class Candle : MonoBehaviour
         if(bNewCandle)
         {
             data.open = newPrice;
-            Debug.Log("new Candle!!!!!!!!!!!!!!!! open price!" + data.open);
+            Debug.Log("new Candle!!!!!!!!!!!!!!!! open price!" + CandleData.open);
             data.end = newPrice;
             data.high = newPrice;
             data.low = newPrice;
             state = State.OnProgress;
 
-            UpdateVisualization(data);
+            UpdateVisualization(CandleData);
         }
         else
         {
             data.end = newPrice;
-            data.high = Mathf.Max(data.high, newPrice);
+            data.high = Mathf.Max(CandleData.high, newPrice);
 
-            if(data.high != newPrice)
+            if(CandleData.high != newPrice)
             {
-                Debug.Log("high Price reset!" + data.high);
+                Debug.Log("high Price reset!" + CandleData.high);
             }
 
-            data.low = Mathf.Min(data.low, newPrice);
+            data.low = Mathf.Min(CandleData.low, newPrice);
 
-            if (data.low != newPrice)
+            if (CandleData.low != newPrice)
             {
-                Debug.Log("Low Price reset!" + data.low);
+                Debug.Log("Low Price reset!" + CandleData.low);
             }
         }
 
@@ -97,8 +105,8 @@ public class Candle : MonoBehaviour
     {
         data.end = lastPrice;
 
-        data.high = Mathf.Max(data.high, lastPrice);
-        data.low = Mathf.Min(data.low, lastPrice);
+        data.high = Mathf.Max(CandleData.high, lastPrice);
+        data.low = Mathf.Min(CandleData.low, lastPrice);
 
         state = State.Complete;
     }

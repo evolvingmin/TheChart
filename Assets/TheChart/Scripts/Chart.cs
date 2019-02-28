@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ChallengeKit;
+using System.Linq;
 
 public class Chart : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class Chart : MonoBehaviour
     private GameObject candlePrefab;
 
     private List<Candle> candles;
+
+
+    [SerializeField]
+    private Camera chartCamera;
 
     private ResourceManager resourceManager;
 
@@ -42,9 +47,10 @@ public class Chart : MonoBehaviour
 
     private float priceChangeLimitPercent = 0.1f;
 
-    // 일단 width는 가변적으로.
-    [SerializeField]
     private Vector3 candleStartPosRoot = Vector3.zero;
+
+    private int startIndexOnCamera = 0;
+    private int lastIndexOnCamera;
 
     public Vector3 CandleStartPosRoot
     {
@@ -82,6 +88,13 @@ public class Chart : MonoBehaviour
         resourceManager = GetComponent<ResourceManager>();
         resourceManager.Initialize();
         resourceManager.SetPrefab<GameObject>("Candle", "Base", candlePrefab);
+
+        candleStartPosRoot = new Vector3(0, chartCamera.orthographicSize, 0);
+
+        chartCamera.transform.position = new Vector3(chartCamera.aspect * chartCamera.orthographicSize, chartCamera.orthographicSize, chartCamera.transform.position.z);
+
+        startIndexOnCamera = 0;
+        lastIndexOnCamera = (int)((chartCamera.aspect * chartCamera.orthographicSize) / 0.32f) * 2; // 켄들사이즈까지 쟤야한다
     }
 
     private void Start()
@@ -110,7 +123,7 @@ public class Chart : MonoBehaviour
         // 이걸 이제 경제 시스템인가 뭔가가 계산해야 함.
         // 하지만 내가 차트를 만들 수 있는지를 검증해야 하니깐.
         int maxDeltaPrice = (int)(lastPrice * priceChangeLimitPercent);
-        maxDeltaPrice = Mathf.Max(100, maxDeltaPrice);
+        maxDeltaPrice = Mathf.Max(500, maxDeltaPrice);
 
         lastPrice = Mathf.Max(Random.Range(lastPrice - maxDeltaPrice, lastPrice + maxDeltaPrice) , 0);
 
@@ -125,6 +138,24 @@ public class Chart : MonoBehaviour
         }
 
         candles[reqIndex].UpdatePriceRealTime(bNewCandle, lastPrice);
+
+        if(reqIndex >= lastIndexOnCamera)
+        {
+            chartCamera.transform.position = new Vector3(chartCamera.transform.position.x + 0.32f, chartCamera.transform.position.y, chartCamera.transform.position.z);
+
+            lastIndexOnCamera++;
+            startIndexOnCamera++;
+
+            
+            var sortedByHighList = candles.GetRange(startIndexOnCamera, candles.Count - startIndexOnCamera).OrderBy(si => si.CandleData.high).ToList();
+
+            chartPriceHigh = sortedByHighList[sortedByHighList.Count - 1].CandleData.high;
+
+            var sortedByLowList = candles.GetRange(startIndexOnCamera, candles.Count - startIndexOnCamera).OrderBy(si => si.CandleData.low).ToList();
+
+            chartPriceLow = sortedByHighList[0].CandleData.low;
+        }
+
     }
 
     public float GetPositionYInChart(int Price)
