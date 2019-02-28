@@ -141,6 +141,20 @@ namespace ChallengeKit
             this.category = category;
         }
 
+        public Define.Result SetPrefab<T>(string prefabName, UnityEngine.Object prefab) where T : UnityEngine.Object
+        {
+            if (!pools.ContainsKey(prefabName))
+            {
+                pools.Add(prefabName, new UnityObjectPool(prefabName, prefab, resourceManager));
+
+                return Define.Result.OK;
+            }
+            else
+            {
+                return Define.Result.REDUNDANT_INITIALIZATION;
+            }
+        }
+
         public T GetObject<T>(string prefabName) where T : UnityEngine.Object
         {
             if (!pools.ContainsKey(prefabName))
@@ -176,6 +190,8 @@ namespace ChallengeKit
             }
             return stringBuilder.ToString();
         }
+
+
     }
 
     public class ResourceManager : MonoBehaviour
@@ -195,6 +211,20 @@ namespace ChallengeKit
 
             return Define.Result.OK;
         }
+
+        // Support for Unity Inspector Prefab Initialization.
+        public Define.Result SetPrefab<T>(string category, string PrefabName, UnityEngine.Object Prefab) where T : UnityEngine.Object
+        {
+            if (!collections.ContainsKey(category))
+            {
+                collections.Add(category, new UnityObjectCollection(category, this));
+            }
+
+            UnityObjectCollection TargetCollection = collections[category];
+
+            return TargetCollection.SetPrefab<T>(PrefabName, Prefab);
+        }
+
 
         public T GetObject<T>(string category, string PrefabName) where T : UnityEngine.Object
         {
