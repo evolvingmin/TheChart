@@ -5,17 +5,9 @@ using ChallengeKit;
 
 using UnityEngine;
 
+
 public class Candle : MonoBehaviour
 {
-    [Serializable]
-    public struct Data
-    {
-        public  int open;
-        public  int end;
-        public  int high;
-        public  int low;
-    }
-
     public enum State
     {
         None,
@@ -23,9 +15,8 @@ public class Candle : MonoBehaviour
         OnProgress
     }
 
-
     private Chart chart;
-    private Data data;
+    private int dataIndex;
 
     private State state = State.None;
 
@@ -43,11 +34,11 @@ public class Candle : MonoBehaviour
         }
     }
 
-    public Data CandleData
+    public CandleData CandleData
     {
         get
         {
-            return data;
+            return chart.GetCandleDataByIndex(dataIndex);
         }
     }
 
@@ -59,59 +50,41 @@ public class Candle : MonoBehaviour
         UpdateVisualization(CandleData);
     }
 
-    public Define.Result Init(Chart chart)
+    public Define.Result Init(int dataIndex, Chart chart)
     {
         this.chart = chart;
+
+        return Reset(dataIndex);
+    }
+
+    public Define.Result Reset(int dataIndex)
+    {
+        this.dataIndex = dataIndex;
+
         transform.localPosition = new Vector3(chart.CandleStartPosRoot.x + bodyRenderer.size.x / 2, chart.CandleStartPosRoot.y, chart.CandleStartPosRoot.z);
 
         chart.CandleStartPosRoot = new Vector3(chart.CandleStartPosRoot.x + bodyRenderer.size.x, chart.CandleStartPosRoot.y, chart.CandleStartPosRoot.z);
+
+        state = State.None;
         return Define.Result.OK;
     }
 
-    public void UpdatePriceRealTime(bool bNewCandle, int newPrice)
+    public void InvalidateUI(bool bUpdate = true)
     {
-        if(bNewCandle)
+        if(bUpdate)
         {
-            data.open = newPrice;
-            Debug.Log("new Candle!!!!!!!!!!!!!!!! open price!" + CandleData.open);
-            data.end = newPrice;
-            data.high = newPrice;
-            data.low = newPrice;
+            //Debug.Log("InvalidateUI Chart, Data index is " + dataIndex);
             state = State.OnProgress;
-
-            UpdateVisualization(CandleData);
         }
         else
         {
-            data.end = newPrice;
-            data.high = Mathf.Max(CandleData.high, newPrice);
-
-            if(CandleData.high != newPrice)
-            {
-                Debug.Log("high Price reset!" + CandleData.high);
-            }
-
-            data.low = Mathf.Min(CandleData.low, newPrice);
-
-            if (CandleData.low != newPrice)
-            {
-                Debug.Log("Low Price reset!" + CandleData.low);
-            }
+            state = State.Complete;
         }
 
+        UpdateVisualization(CandleData);
     }
 
-    public void UpdateEnd(int lastPrice)
-    {
-        data.end = lastPrice;
-
-        data.high = Mathf.Max(CandleData.high, lastPrice);
-        data.low = Mathf.Min(CandleData.low, lastPrice);
-
-        state = State.Complete;
-    }
-
-    private void UpdateVisualization(Data data)
+    private void UpdateVisualization(CandleData data)
     {
         // 좌우는 절대값으로 움직인다
         // 하지만 위아래 켄들의 크기는 가변 비율로서 잡아야 한다.
@@ -127,7 +100,6 @@ public class Candle : MonoBehaviour
         // 또한 가격이 갱신될때마다, 위아래 포지션에 대해서는 만들어진 켄들 모두가 변동되어야 한다.
         // 즉 개별 업데이트가 필요하다. 모든 캔들이 가격이 갱신 될 때마다 업데이트가 불려져야 한다는거다.
 
-
         if (state == State.OnProgress)
         {
             if (IsUp)
@@ -142,14 +114,11 @@ public class Candle : MonoBehaviour
             }
         }
 
-
         float endPositionY = chart.GetPositionYInChart(data.end);
         float openPositionY = chart.GetPositionYInChart(data.open);
         float lowPositionY = chart.GetPositionYInChart(data.low);
         float highPositionY = chart.GetPositionYInChart(data.high);
         
-        // 님.. 몇번이고 이야기 하지만, 수학 계산하려면 무조건 끄적여라. 니는 끄적이지 않으면 수학적인 계산 자체가 발동이 안된다.
-
         float bodyPosition = (endPositionY - openPositionY) / 2 + openPositionY;
         bodyRenderer.transform.localPosition = new Vector3(0, bodyPosition - transform.localPosition.y, 0);
         bodyRenderer.size = new Vector2(bodyRenderer.size.x, ( endPositionY - openPositionY ));
@@ -158,4 +127,6 @@ public class Candle : MonoBehaviour
         shadowRenderer.transform.localPosition = new Vector3(0, shadowPosition - transform.localPosition.y, 0);
         shadowRenderer.size = new Vector2(shadowRenderer.size.x, ( highPositionY - lowPositionY ));
     }
+
+
 }

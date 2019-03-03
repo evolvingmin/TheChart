@@ -212,7 +212,7 @@ namespace ChallengeKit
             return Define.Result.OK;
         }
 
-        // Support for Unity Inspector Prefab Initialization.
+        // Support for Unity Inspector Prefab Initialization. (recommend)
         public Define.Result SetPrefab<T>(string category, string PrefabName, UnityEngine.Object Prefab) where T : UnityEngine.Object
         {
             if (!collections.ContainsKey(category))
