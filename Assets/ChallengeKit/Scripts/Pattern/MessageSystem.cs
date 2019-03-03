@@ -30,6 +30,9 @@ namespace ChallengeKit.Pattern
                 if (sender == system)
                     continue;
 
+                if (system == null)
+                    continue;
+
                 system.ProcReceive(command, objs);
             }
             

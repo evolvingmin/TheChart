@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ChallengeKit;
+using ChallengeKit.Pattern;
 using System.Linq;
 
 [System.Serializable]
@@ -11,7 +12,6 @@ public class CandleData
     public int end;
     public int high;
     public int low;
-
 
     public CandleData(int lastPrice)
     {
@@ -31,7 +31,7 @@ public class CandleData
     }
 }
 
-public class Chart : MonoBehaviour
+public class Chart : Singleton<Chart>
 {
     [SerializeField]
     private GameObject candlePrefab;
@@ -229,8 +229,6 @@ public class Chart : MonoBehaviour
         {
             ruler.UpdateNumbers(chartPriceLow, chartPriceHigh);
         }
-
-
     }
 
     public float GetPositionYInChart(int Price)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using ChallengeKit.Pattern;
 using ChallengeKit;
 
 using UnityEngine;
@@ -22,6 +23,9 @@ public class Candle : MonoBehaviour
 
     [SerializeField]
     private SpriteRenderer bodyRenderer;
+
+    [SerializeField]
+    private BoxCollider2D bodyCollider;
 
     [SerializeField]
     private SpriteRenderer shadowRenderer;
@@ -134,15 +138,29 @@ public class Candle : MonoBehaviour
         
         float bodyPosition = candleHeight / 2 + openPositionY;
         bodyRenderer.transform.localPosition = new Vector3(0, bodyPosition - transform.localPosition.y, 0);
-        bodyRenderer.size = new Vector2(bodyRenderer.size.x, candleHeight);
+        bodyCollider.offset = new Vector2(0, bodyPosition - transform.localPosition.y);
+        SetBodySize(bodyRenderer.size.x, Mathf.Abs(candleHeight));
 
         float shadowPosition = (highPositionY - lowPositionY) / 2 + lowPositionY;
         shadowRenderer.transform.localPosition = new Vector3(0, shadowPosition - transform.localPosition.y, 0);
         shadowRenderer.size = new Vector2(shadowRenderer.size.x, ( highPositionY - lowPositionY ));
     }
 
-    public void SetBodySize(float candleWidth)
+    public void SetBodySize(float candleWidth, float candleHeight = minHeight)
     {
-        bodyRenderer.size = new Vector2(candleWidth, minHeight);
+        bodyRenderer.size = new Vector2(candleWidth, candleHeight);
+        bodyCollider.size = new Vector2(candleWidth, candleHeight);
     }
+
+    void OnMouseOver()
+    {
+        MessageSystem.Instance.BroadcastSystems(null, "InvalidateUI", "CandleDataDisplayer", dataIndex);
+    }
+
+    void OnMouseExit()
+    {
+        MessageSystem.Instance.BroadcastSystems(null, "SetActive", "CandleDataDisplayer", false);
+    }
+    
+
 }
