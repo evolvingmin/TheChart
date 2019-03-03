@@ -64,6 +64,9 @@ public class Chart : MonoBehaviour
 
     private float positionLowY = 0.5f;
     private float positionHighY = 9.5f;
+    
+    [SerializeField]
+    private float candleWidth = 0.32f;
 
     private Vector3 candleStartPosRoot = Vector3.zero;
 
@@ -107,13 +110,14 @@ public class Chart : MonoBehaviour
         candleDatas = new List<CandleData>();
 
         resourceManager.Initialize();
+        candlePrefab.GetComponent<Candle>().SetBodySize(candleWidth);
         resourceManager.SetPrefab<GameObject>("Candle", "Base", candlePrefab, transform);
 
         candleStartPosRoot = new Vector3(0, chartCamera.orthographicSize, 0);
 
         chartCamera.transform.position = new Vector3(chartCamera.aspect * chartCamera.orthographicSize - leftMargin, chartCamera.orthographicSize, chartCamera.transform.position.z);
 
-        maxCandleCount = (int)( ( chartCamera.aspect * chartCamera.orthographicSize - leftMargin/2 ) / 0.32f ) * 2; 
+        maxCandleCount = (int)( (( chartCamera.aspect * chartCamera.orthographicSize - leftMargin/2 ) * 2) / candleWidth ) ; 
         Debug.Log("Chart Awake, MaxCandleCount : " + maxCandleCount);
 
         ruler.Init(leftMargin, chartCamera.aspect * chartCamera.orthographicSize, chartCamera.orthographicSize * 2, positionLowY, positionHighY);
@@ -163,7 +167,7 @@ public class Chart : MonoBehaviour
 
         int maxDeltaPrice = (int)( lastPrice * priceChangeLimitPercent );
         maxDeltaPrice = Mathf.Max(500, maxDeltaPrice);
-        lastPrice = Mathf.Max(Random.Range(lastPrice - maxDeltaPrice, lastPrice + maxDeltaPrice), 0);
+        lastPrice = Mathf.Max(Random.Range(lastPrice - maxDeltaPrice, lastPrice + maxDeltaPrice + 50), 0);
 
         // 3. 갱신된 가격정보로 으로 켄들 데이터 갱신.
         if (bNewCandleData)
@@ -202,7 +206,7 @@ public class Chart : MonoBehaviour
 
         if(bNewRange && bNewCandleData)
         {
-            chartCamera.transform.position = new Vector3(chartCamera.transform.position.x + 0.32f, chartCamera.transform.position.y, chartCamera.transform.position.z);
+            chartCamera.transform.position = new Vector3(chartCamera.transform.position.x + candleWidth, chartCamera.transform.position.y, chartCamera.transform.position.z);
 
             var sortedByHighList = candles.OrderBy(si => si.CandleData.high).ToList();
             newHighPrice = sortedByHighList[sortedByHighList.Count - 1].CandleData.high;

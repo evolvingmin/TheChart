@@ -141,5 +141,8 @@ public class Candle : MonoBehaviour
         shadowRenderer.size = new Vector2(shadowRenderer.size.x, ( highPositionY - lowPositionY ));
     }
 
-
+    public void SetBodySize(float candleWidth)
+    {
+        bodyRenderer.size = new Vector2(candleWidth, minHeight);
+    }
 }

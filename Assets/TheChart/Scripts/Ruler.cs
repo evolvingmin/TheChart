@@ -19,6 +19,9 @@ public class Ruler : MonoBehaviour
     private int lineCount = 4; // 최초 시작과 끝을 제외한 4라인 
 
     [SerializeField]
+    private float lineHeight = 0.02f;
+
+    [SerializeField]
     private int unitLinePercent = 5;
 
     [SerializeField]
@@ -50,15 +53,18 @@ public class Ruler : MonoBehaviour
 
         float baseNumberPositionX = boardRendrer.transform.position.x + leftMargin / 2;
         float baseNumberOffsetY = numberPrefab.GetComponent<Renderer>().bounds.size.y;
-        
+
+        //linePrefab.GetComponent<SpriteRenderer>().size = new Vector2(width, 0.15f);
         for (int i = 0; i <= lineCount; i++)
         {
             var lineObject = resourceManager.GetObject<GameObject>("ruler", "line");
             lineObject.transform.position = new Vector3(width - leftMargin/2, baseLinePositionY, 0);
+            lineObject.GetComponent<SpriteRenderer>().size = new Vector2(width * 2 - leftMargin, lineHeight);
 
             var numberObject = resourceManager.GetObject<GameObject>("ruler", "number");
             
             numberObject.transform.position = new Vector3(baseNumberPositionX, baseNumberOffsetY +  baseLinePositionY, 0);
+
             numberObject.GetComponent<Renderer>().sortingOrder = 2;
             numbers.Add(numberObject.GetComponent<TextMesh>());
 
