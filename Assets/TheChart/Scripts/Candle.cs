@@ -26,6 +26,8 @@ public class Candle : MonoBehaviour
     [SerializeField]
     private SpriteRenderer shadowRenderer;
 
+    private const float minHeight = 0.02f;
+
     public bool IsUp
     {
         get
@@ -122,10 +124,17 @@ public class Candle : MonoBehaviour
         float openPositionY = chart.GetPositionYInChart(data.open);
         float lowPositionY = chart.GetPositionYInChart(data.low);
         float highPositionY = chart.GetPositionYInChart(data.high);
+
+        float candleHeight = endPositionY - openPositionY;
+
+        if (Mathf.Abs(candleHeight) < minHeight)
+        {
+            candleHeight = IsUp ? minHeight : -1 * minHeight;
+        }
         
-        float bodyPosition = (endPositionY - openPositionY) / 2 + openPositionY;
+        float bodyPosition = candleHeight / 2 + openPositionY;
         bodyRenderer.transform.localPosition = new Vector3(0, bodyPosition - transform.localPosition.y, 0);
-        bodyRenderer.size = new Vector2(bodyRenderer.size.x, ( endPositionY - openPositionY ));
+        bodyRenderer.size = new Vector2(bodyRenderer.size.x, candleHeight);
 
         float shadowPosition = (highPositionY - lowPositionY) / 2 + lowPositionY;
         shadowRenderer.transform.localPosition = new Vector3(0, shadowPosition - transform.localPosition.y, 0);

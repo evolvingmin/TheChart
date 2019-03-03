@@ -4,7 +4,6 @@ using UnityEngine;
 using ChallengeKit;
 using System.Linq;
 
-
 [System.Serializable]
 public class CandleData
 {
@@ -32,7 +31,6 @@ public class CandleData
     }
 }
 
-
 public class Chart : MonoBehaviour
 {
     [SerializeField]
@@ -47,6 +45,10 @@ public class Chart : MonoBehaviour
     [SerializeField]
     private Camera chartCamera;
 
+    [SerializeField]
+    private Ruler ruler;
+
+    [SerializeField]
     private ResourceManager resourceManager;
 
     private int lastPrice = 5000;
@@ -57,14 +59,16 @@ public class Chart : MonoBehaviour
     private float priceChangeLimitPercent = 0.1f;
 
     // 가변 카메라 비율 얻어 올 수 있도록 수정.
-    private int positionLowY = 0;
-    private int positionHighY = 10;
+    [SerializeField]
+    private float leftMargin = 2.0f;
+
+    private float positionLowY = 0.5f;
+    private float positionHighY = 9.5f;
 
     private Vector3 candleStartPosRoot = Vector3.zero;
 
     private bool isDirty = false;
     public bool IsDirty { get { return isDirty; } }
-
 
     // tickControl
 
@@ -97,23 +101,23 @@ public class Chart : MonoBehaviour
 
     private int maxCandleCount;
 
-
-
     private void Awake()
     {
         candles = new List<Candle>();
         candleDatas = new List<CandleData>();
 
-        resourceManager = GetComponent<ResourceManager>();
         resourceManager.Initialize();
-        resourceManager.SetPrefab<GameObject>("Candle", "Base", candlePrefab);
+        resourceManager.SetPrefab<GameObject>("Candle", "Base", candlePrefab, transform);
 
         candleStartPosRoot = new Vector3(0, chartCamera.orthographicSize, 0);
 
-        chartCamera.transform.position = new Vector3(chartCamera.aspect * chartCamera.orthographicSize, chartCamera.orthographicSize, chartCamera.transform.position.z);
+        chartCamera.transform.position = new Vector3(chartCamera.aspect * chartCamera.orthographicSize - leftMargin, chartCamera.orthographicSize, chartCamera.transform.position.z);
 
-        maxCandleCount = (int)( ( chartCamera.aspect * chartCamera.orthographicSize ) / 0.32f ) * 2; ;
+        maxCandleCount = (int)( ( chartCamera.aspect * chartCamera.orthographicSize - leftMargin/2 ) / 0.32f ) * 2; 
         Debug.Log("Chart Awake, MaxCandleCount : " + maxCandleCount);
+
+        ruler.Init(leftMargin, chartCamera.aspect * chartCamera.orthographicSize, chartCamera.orthographicSize * 2, positionLowY, positionHighY);
+        ruler.UpdateNumbers(chartPriceLow, chartPriceHigh);
     }
 
     private void Start()
@@ -161,7 +165,7 @@ public class Chart : MonoBehaviour
         maxDeltaPrice = Mathf.Max(500, maxDeltaPrice);
         lastPrice = Mathf.Max(Random.Range(lastPrice - maxDeltaPrice, lastPrice + maxDeltaPrice), 0);
 
-        // 3. 작성된 가격으로 데이터 갱신.
+        // 3. 갱신된 가격정보로 으로 켄들 데이터 갱신.
         if (bNewCandleData)
         {
             if(candleDatas.Count > 1)
@@ -179,11 +183,11 @@ public class Chart : MonoBehaviour
         // 4. 갱신된 데이터 인덱스 기반으로 화면 영역을 넘어간 후처리
         // 4 - 1 최소, 최대 가격 범위 다시 정함.
         // 4 - 2 카메라 이동.
-
         UpdateChartView(lastPrice, bNewCandleData, dataIndex >= maxCandleCount);
 
-
         // 5. 데이터를 기준으로 바로 갱신이 필요한 캔들들은 직접 InvalidateUI 호출.
+        // 5 - 1 새 캔들 생성되면, 이전 캔들에겐 마지막 데이터로 종료
+        // 5 - 2 새 캔들은 현재 켄들 데이터 기준으로 갱신.
         if (candleDatas.Count > 1 && bNewCandleData)
         {
             GetCandleByIndex(dataIndex - 1).InvalidateUI(false);
@@ -216,6 +220,13 @@ public class Chart : MonoBehaviour
 
         chartPriceHigh = newHighPrice;
         chartPriceLow = newLowPrice;
+
+        if(isDirty && ruler)
+        {
+            ruler.UpdateNumbers(chartPriceLow, chartPriceHigh);
+        }
+
+
     }
 
     public float GetPositionYInChart(int Price)

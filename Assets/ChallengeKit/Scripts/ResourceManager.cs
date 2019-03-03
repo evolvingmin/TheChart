@@ -19,12 +19,14 @@ namespace ChallengeKit
         // 오브젝트 풀은 현재 GameObject 대상으로만 지원한다.
         private bool bSupportObjectPool = false;
         private ResourceManager resourceManager;
+        private Transform parent;
 
-        public UnityObjectPool(string name, UnityEngine.Object basePrefab, ResourceManager resourceManager)
+        public UnityObjectPool(string name, UnityEngine.Object basePrefab, ResourceManager resourceManager, Transform parent)
         {
             this.basePrefab = basePrefab;
             this.name = name;
             this.resourceManager = resourceManager;
+            this.parent = parent;
 
             available = new Stack<UnityEngine.Object>();
 
@@ -55,7 +57,16 @@ namespace ChallengeKit
                 {
                     GameObject current = (GameObject)spawned;
                     current.SetActive(false);
-                    current.transform.SetParent(resourceManager.transform);
+
+                    if(parent == null)
+                    {
+                        current.transform.SetParent(resourceManager.transform);
+                    }
+                    else
+                    {
+                        current.transform.SetParent(parent);
+                    }
+                    
                 }
                 available.Push(spawned);
             }
@@ -104,7 +115,15 @@ namespace ChallengeKit
                 {
                     GameObject current = (GameObject)spawned;
                     current.SetActive(false);
-                    current.transform.SetParent(resourceManager.transform);
+
+                    if (parent == null)
+                    {
+                        current.transform.SetParent(resourceManager.transform);
+                    }
+                    else
+                    {
+                        current.transform.SetParent(parent);
+                    }
                 }
 
                 available.Push(spawned);
@@ -141,11 +160,11 @@ namespace ChallengeKit
             this.category = category;
         }
 
-        public Define.Result SetPrefab<T>(string prefabName, UnityEngine.Object prefab) where T : UnityEngine.Object
+        public Define.Result SetPrefab<T>(string prefabName, UnityEngine.Object prefab, Transform parent) where T : UnityEngine.Object
         {
             if (!pools.ContainsKey(prefabName))
             {
-                pools.Add(prefabName, new UnityObjectPool(prefabName, prefab, resourceManager));
+                pools.Add(prefabName, new UnityObjectPool(prefabName, prefab, resourceManager, parent));
 
                 return Define.Result.OK;
             }
@@ -161,7 +180,7 @@ namespace ChallengeKit
             {
                 string TargetPath = string.Format("{0}/{1}/{2}", resourceManager.RootPath, category, prefabName);
                 T basePrefab = (T)Resources.Load(TargetPath);
-                pools.Add(prefabName, new UnityObjectPool(prefabName, basePrefab, resourceManager));
+                pools.Add(prefabName, new UnityObjectPool(prefabName, basePrefab, resourceManager, resourceManager.transform));
             }
             UnityObjectPool targetObjectPool = pools[prefabName];
 
@@ -213,7 +232,7 @@ namespace ChallengeKit
         }
 
         // Support for Unity Inspector Prefab Initialization. (recommend)
-        public Define.Result SetPrefab<T>(string category, string PrefabName, UnityEngine.Object Prefab) where T : UnityEngine.Object
+        public Define.Result SetPrefab<T>(string category, string prefabName, UnityEngine.Object prefab, Transform parent) where T : UnityEngine.Object
         {
             if (!collections.ContainsKey(category))
             {
@@ -222,11 +241,11 @@ namespace ChallengeKit
 
             UnityObjectCollection TargetCollection = collections[category];
 
-            return TargetCollection.SetPrefab<T>(PrefabName, Prefab);
+            return TargetCollection.SetPrefab<T>(prefabName, prefab, parent);
         }
 
 
-        public T GetObject<T>(string category, string PrefabName) where T : UnityEngine.Object
+        public T GetObject<T>(string category, string prefabName) where T : UnityEngine.Object
         {
             if (!collections.ContainsKey(category))
             {
@@ -235,7 +254,7 @@ namespace ChallengeKit
 
             UnityObjectCollection TargetCollection = collections[category];
 
-            return TargetCollection.GetObject<T>(PrefabName);
+            return TargetCollection.GetObject<T>(prefabName);
         }
 
         public UnityEngine.Object Spawn(UnityEngine.Object prefab)
