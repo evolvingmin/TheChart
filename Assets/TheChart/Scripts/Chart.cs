@@ -13,11 +13,22 @@ public class CandleData
     public int high;
     public int low;
 
-    public void Update(int newPrice)
+
+    public CandleData(int lastPrice)
+    {
+        open = lastPrice;
+        end = lastPrice;
+        high = lastPrice;
+        low = lastPrice;
+    }
+
+    public bool Update(int newPrice)
     {
         end = newPrice;
         high = Mathf.Max(high, newPrice);
         low = Mathf.Min(low, newPrice);
+
+        return high != newPrice || low != newPrice;
     }
 }
 
@@ -38,7 +49,6 @@ public class Chart : MonoBehaviour
 
     private ResourceManager resourceManager;
 
-
     private int lastPrice = 5000;
 
     private int chartPriceLow = 0;
@@ -52,8 +62,9 @@ public class Chart : MonoBehaviour
 
     private Vector3 candleStartPosRoot = Vector3.zero;
 
-    private int startIndexOnCamera = 0;
-    private int lastIndexOnCamera;
+    private bool isDirty = false;
+    public bool IsDirty { get { return isDirty; } }
+
 
     // tickControl
 
@@ -84,13 +95,9 @@ public class Chart : MonoBehaviour
         }
     }
 
-    public int MaxCandleCount
-    {
-        get
-        {
-            return lastIndexOnCamera - startIndexOnCamera + 5;  //여기서 5는 버퍼, 나중에 스크롤 베이스로 이리저리 움직일때 구현해 봐야한다
-        }
-    }
+    private int maxCandleCount;
+
+
 
     private void Awake()
     {
@@ -105,10 +112,8 @@ public class Chart : MonoBehaviour
 
         chartCamera.transform.position = new Vector3(chartCamera.aspect * chartCamera.orthographicSize, chartCamera.orthographicSize, chartCamera.transform.position.z);
 
-        startIndexOnCamera = 0;
-        lastIndexOnCamera = (int)((chartCamera.aspect * chartCamera.orthographicSize) / 0.32f) * 2; // 켄들사이즈까지 쟤야한다
-
-        Debug.Log("Chart Awake, MaxCandleCount : " + MaxCandleCount);
+        maxCandleCount = (int)( ( chartCamera.aspect * chartCamera.orthographicSize ) / 0.32f ) * 2; ;
+        Debug.Log("Chart Awake, MaxCandleCount : " + maxCandleCount);
     }
 
     private void Start()
@@ -137,7 +142,7 @@ public class Chart : MonoBehaviour
 
         if (bNewCandleData)
         {
-            if (candles.Count < MaxCandleCount)
+            if (candles.Count < maxCandleCount)
             {
                 var CandleObject = resourceManager.GetObject<GameObject>("Candle", "Base");
                 Candle candle = CandleObject.GetComponent<Candle>();
@@ -150,14 +155,11 @@ public class Chart : MonoBehaviour
             }
         }
 
-        // 2. 가격 작성
+        // 2. 가격 갱신.
+
         int maxDeltaPrice = (int)( lastPrice * priceChangeLimitPercent );
         maxDeltaPrice = Mathf.Max(500, maxDeltaPrice);
-
         lastPrice = Mathf.Max(Random.Range(lastPrice - maxDeltaPrice, lastPrice + maxDeltaPrice), 0);
-
-        chartPriceLow = Mathf.Min(lastPrice, chartPriceLow);
-        chartPriceHigh = Mathf.Max(lastPrice, chartPriceHigh);
 
         // 3. 작성된 가격으로 데이터 갱신.
         if (bNewCandleData)
@@ -165,49 +167,55 @@ public class Chart : MonoBehaviour
             if(candleDatas.Count > 1)
             {
                 GetCandleDataByIndex(dataIndex - 1).Update(lastPrice);
-                GetCandleByIndex(dataIndex - 1).InvalidateUI(false);
             }
 
-            var newCandleData = new CandleData
-            {
-                open = lastPrice,
-                end = lastPrice,
-                high = lastPrice,
-                low = lastPrice,
-            };
-            candleDatas.Add(newCandleData);
-            Debug.Log("New Candle Generated, Index :" + dataIndex + ", open price is :" + lastPrice);
+            candleDatas.Add(new CandleData(lastPrice));
         }
         else
         {
             GetCandleDataByIndex(dataIndex).Update(lastPrice);
         }
 
-        GetCandleByIndex(dataIndex).InvalidateUI();
-
-
         // 4. 갱신된 데이터 인덱스 기반으로 화면 영역을 넘어간 후처리
-        // 4 - 1 최소, 최대 가격 범위 다시 정하고
-        // 4 - 2 todo : startIndexOnCamera 이전 켄들 비 활성화 및 수집처리. 
+        // 4 - 1 최소, 최대 가격 범위 다시 정함.
+        // 4 - 2 카메라 이동.
 
-        if (dataIndex >= lastIndexOnCamera)
+        UpdateChartView(lastPrice, bNewCandleData, dataIndex >= maxCandleCount);
+
+
+        // 5. 데이터를 기준으로 바로 갱신이 필요한 캔들들은 직접 InvalidateUI 호출.
+        if (candleDatas.Count > 1 && bNewCandleData)
         {
-            lastIndexOnCamera++;
-            startIndexOnCamera++;
-
-            UpdateChartView();
+            GetCandleByIndex(dataIndex - 1).InvalidateUI(false);
         }
+
+        GetCandleByIndex(dataIndex).InvalidateUI();
     }
 
-    private void UpdateChartView()
+    private void UpdateChartView(int lastPrice, bool bNewCandleData, bool bNewRange)
     {
-        chartCamera.transform.position = new Vector3(chartCamera.transform.position.x + 0.32f, chartCamera.transform.position.y, chartCamera.transform.position.z);
+        int newHighPrice, newLowPrice;
 
-        var sortedByHighList = candles.OrderBy(si => si.CandleData.high).ToList();
-        chartPriceHigh = sortedByHighList[sortedByHighList.Count - 1].CandleData.high;
+        if(bNewRange && bNewCandleData)
+        {
+            chartCamera.transform.position = new Vector3(chartCamera.transform.position.x + 0.32f, chartCamera.transform.position.y, chartCamera.transform.position.z);
 
-        var sortedByLowList = candles.OrderBy(si => si.CandleData.low).ToList();
-        chartPriceLow = sortedByLowList[0].CandleData.low;
+            var sortedByHighList = candles.OrderBy(si => si.CandleData.high).ToList();
+            newHighPrice = sortedByHighList[sortedByHighList.Count - 1].CandleData.high;
+            var sortedByLowList = candles.OrderBy(si => si.CandleData.low).ToList();
+            newLowPrice = sortedByLowList[0].CandleData.low;
+        }
+        else
+        {
+            newHighPrice = Mathf.Max(lastPrice, chartPriceHigh);
+            newLowPrice = Mathf.Min(lastPrice, chartPriceLow);
+        }
+
+
+        isDirty = newHighPrice != chartPriceHigh || newLowPrice != chartPriceLow;
+
+        chartPriceHigh = newHighPrice;
+        chartPriceLow = newLowPrice;
     }
 
     public float GetPositionYInChart(int Price)
@@ -218,7 +226,7 @@ public class Chart : MonoBehaviour
 
     public Candle GetCandleByIndex(int dataIndex)
     {
-        return candles[dataIndex % MaxCandleCount ];
+        return candles[dataIndex % maxCandleCount ];
     }
 
     public CandleData GetCandleDataByIndex(int dataIndex)

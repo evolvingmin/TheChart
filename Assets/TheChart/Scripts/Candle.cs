@@ -76,12 +76,13 @@ public class Candle : MonoBehaviour
             //Debug.Log("InvalidateUI Chart, Data index is " + dataIndex);
             state = State.OnProgress;
         }
-        else
+
+        UpdateVisualization(CandleData);
+
+        if (bUpdate == false)
         {
             state = State.Complete;
         }
-
-        UpdateVisualization(CandleData);
     }
 
     private void UpdateVisualization(CandleData data)
@@ -113,6 +114,9 @@ public class Candle : MonoBehaviour
                 shadowRenderer.color = Color.blue;
             }
         }
+
+        if (state == State.Complete && chart.IsDirty == false)
+            return;
 
         float endPositionY = chart.GetPositionYInChart(data.end);
         float openPositionY = chart.GetPositionYInChart(data.open);
