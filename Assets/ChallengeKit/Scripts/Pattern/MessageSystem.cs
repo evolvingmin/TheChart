@@ -79,7 +79,7 @@ namespace ChallengeKit.Pattern
     {
         Define.Result Init(SystemMono parentSystem);
 
-        void ParseCommand(string Command, params object[] Objs);
+        bool ParseCommand(string Command, params object[] Objs);
     }
 
 }

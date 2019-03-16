@@ -4,6 +4,8 @@ using UnityEngine;
 using ChallengeKit;
 using ChallengeKit.Pattern;
 using System.Linq;
+using System;
+using Random = UnityEngine.Random;
 
 [System.Serializable]
 public class CandleData
@@ -54,6 +56,7 @@ public class Chart : Singleton<Chart>
     private int lastPrice = 5000;
 
     private int chartPriceLow = 0;
+
     private int chartPriceHigh = 10000; // 일단 어림짐작으로.
 
     private float priceChangeLimitPercent = 0.1f;
@@ -88,6 +91,10 @@ public class Chart : Singleton<Chart>
     private float startTime;
     private float currentTime;
     private float endTime;
+
+    // new 경제 관련 제어
+
+    float waitQuery = 0.0f;
 
     public Vector3 CandleStartPosRoot
     {
@@ -126,18 +133,17 @@ public class Chart : Singleton<Chart>
 
     private void Start()
     {
-        startTime = Time.realtimeSinceStartup;
-        lastTickTime = Time.realtimeSinceStartup - startTime;
+        startTime = 0;
+        lastTickTime = 0;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // 1. 시간축과 현재 시간대를 이용하여, 초기 세팅
         // 1-1 캔들 생성
         // 1-2 캔들 데이터 생성 여부 체크.
-
-        currentTime = Time.realtimeSinceStartup - startTime;
+        currentTime += Time.deltaTime;
 
         if (currentTime - lastTickTime < unitTime_Tick)
             return;
@@ -168,6 +174,12 @@ public class Chart : Singleton<Chart>
         int maxDeltaPrice = (int)( lastPrice * priceChangeLimitPercent );
         maxDeltaPrice = Mathf.Max(500, maxDeltaPrice);
         lastPrice = Mathf.Max(Random.Range(lastPrice - maxDeltaPrice, lastPrice + maxDeltaPrice + 50), 0);
+
+        if(waitQuery != 0.0f)
+        {
+            lastPrice = lastPrice + (int)(lastPrice * waitQuery);
+            waitQuery = 0.0f;
+        }
 
         // 3. 갱신된 가격정보로 으로 켄들 데이터 갱신.
         if (bNewCandleData)
@@ -246,4 +258,10 @@ public class Chart : Singleton<Chart>
     {
         return candleDatas[dataIndex];
     }
+
+    public void AddTransection(float affectPercent)
+    {
+        waitQuery = affectPercent;
+    }
+
 }

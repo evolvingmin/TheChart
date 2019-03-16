@@ -20,12 +20,15 @@ namespace ChallengeKit.GamePlay
             return Define.Result.OK;
         }
 
-        public void ParseCommand(string Command, params object[] Objs)
+        public bool ParseCommand(string Command, params object[] Objs)
         {
             if (Command == "OnSelectionConfirm")
             {
                 scenarioSystem.UpdateScenarioNode((int)Objs[0]);
+                return true;
             }
+
+            return false;
         }
     }
 }

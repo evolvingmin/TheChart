@@ -20,7 +20,7 @@ namespace ChallengeKit.GamePlay
             return Define.Result.OK;
         }
 
-        public void ParseCommand(string Command, params object[] Objs)
+        public bool ParseCommand(string Command, params object[] Objs)
         {
             if(Command == "StartDialogByScenario")
             {
@@ -29,14 +29,15 @@ namespace ChallengeKit.GamePlay
                 if(dialogSystem == null)
                 {
                     UnityEngine.Debug.LogWarning("dialogSystem is null, Command is : " + Command);
-                    return;
+                    return false;
                 }
 
                 dialogSystem.ParseCSVData(startnode.ScriptRoot, startnode.DialogType, startnode.ScriptName);
                 dialogSystem.StartDialog();
+                return true;
             }
 
-
+            return false;
         }
     }
 }

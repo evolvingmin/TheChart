@@ -4,9 +4,19 @@ using UnityEngine;
 
 namespace ChallengeKit
 {
+    public static class QuaternionEx
+    {
+        // 시작점과 끝점의 2D 회전 쿼터니언을 구합니다.
+        public static void Rotate2D(this Quaternion quaternion, Vector3 startPosition, Vector3 endPosition)
+        {
+            float angle = Vector3.SignedAngle(Vector3.up, endPosition - startPosition, Vector3.forward);
+            Vector3 angleZ = new Vector3(0, 0, angle);
+            quaternion = Quaternion.Euler(angleZ);
+        }
+    }
+
     public static class MathEx
     {
-
         // return : degrees
         public static float SignedAngle(Vector3 from, Vector3 to, Vector3 axis)
         {

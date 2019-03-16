@@ -50,8 +50,6 @@ namespace ChallengeKit.Pattern
                 return target;
             }
         }
-
-
     }
 
 
@@ -66,25 +64,36 @@ namespace ChallengeKit.Pattern
             return Define.Result.OK;
         }
 
-        public void ParseCommand(string Command, params object[] Objs)
+        public bool ParseCommand(string Command, params object[] Objs)
         {
             //MessageSystem.Instance.BroadcastSystems(null, "SetActive", "CandleDataDisplayer", bOpen);
-
-
             switch (Command)
             {
                 case "SetActive":
                     uiSystem.GetUIComponent((string)Objs[0]).gameObject.SetActive((bool)Objs[1]);
-                    break;
+                    return true;
                 case "InvalidateUI":
                     uiSystem.GetUIComponent((string)Objs[0]).InvalidateUI(Objs);
-                    break;
+                    return true;
+                /*
+                case "HandleSwipe":
+                    uiSystem.GetUIComponent((string)Objs[0]).HandleSwipe((float)Objs[1], (float)Objs[2]);
+                    return true;
+                case "BeginDrag":
+                    uiSystem.GetUIComponent((string)Objs[0]).BeginDrag((float)Objs[1], (float)Objs[2]);
+                    return true;
+                case "DragTo":
+                    uiSystem.GetUIComponent((string)Objs[0]).DragTo((float)Objs[1], (float)Objs[2]);
+                    return true;
+                case "EndDrag":
+                    uiSystem.GetUIComponent((string)Objs[0]).EndDrag((float)Objs[1], (float)Objs[2]);
+                    return true;
+                */
                 default:
-                    break;
+                    return false;
             }
 
         }
-
     }
 }
 
