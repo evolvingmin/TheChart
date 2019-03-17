@@ -177,7 +177,9 @@ public class Chart : Singleton<Chart>
 
         if(waitQuery != 0.0f)
         {
-            lastPrice = lastPrice + (int)(lastPrice * waitQuery);
+            int affected = (int)( lastPrice * waitQuery );
+            lastPrice = lastPrice + affected;
+            Debug.Log("Price You Affected: " + affected);
             waitQuery = 0.0f;
         }
 

@@ -154,12 +154,12 @@ public class Candle : MonoBehaviour
 
     void OnMouseOver()
     {
-        MessageSystem.Instance.BroadcastSystems(null, "InvalidateUI", "CandleDataDisplayer", dataIndex);
+        //MessageSystem.Instance.BroadcastSystems(null, "InvalidateUI", "CandleDataDisplayer", dataIndex);
     }
 
     void OnMouseExit()
     {
-        MessageSystem.Instance.BroadcastSystems(null, "SetActive", "CandleDataDisplayer", false);
+        //MessageSystem.Instance.BroadcastSystems(null, "SetActive", "CandleDataDisplayer", false);
     }
     
 

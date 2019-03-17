@@ -6,6 +6,7 @@ using ChallengeKit;
 
 public class CandleDataDisplayer : UIComponent
 {
+    /*
     [SerializeField]
     private TextMeshProUGUI openLabel = null;
     [SerializeField]
@@ -14,6 +15,7 @@ public class CandleDataDisplayer : UIComponent
     private TextMeshProUGUI lowLabel = null;
     [SerializeField]
     private TextMeshProUGUI highLabel = null;
+    */
     [SerializeField]
     private TextMeshProUGUI openPrice = null;
     [SerializeField]

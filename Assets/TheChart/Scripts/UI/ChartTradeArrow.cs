@@ -27,15 +27,15 @@ public class ChartTradeArrow : UIComponent
 
     private Coroutine fadeAwayCorutine;
 
-    private Color baseColor;
+    //private Color baseColor;
     private Vector3 baseScale;
 
     private void Awake()
     {
         arrowRenderer = GetComponent<SpriteRenderer>();
 
-        baseLengthY = arrowRenderer.size.y;
-        baseColor = arrowRenderer.color;
+        baseLengthY = arrowRenderer.sprite.rect.height / arrowRenderer.sprite.pixelsPerUnit;
+        //baseColor = arrowRenderer.color;
         baseScale= transform.localScale;
 
     }
@@ -43,9 +43,8 @@ public class ChartTradeArrow : UIComponent
 
     public override void HandleSwipe(float startX, float startY, float endX, float endY, float velocityX, float velocityY)
     {
-        if (bArrowDisapear)
-            return;
-
+        return;
+        /*
         Vector3 startWorld = Camera.main.ScreenToWorldPoint(new Vector2(startX, startY));
         Vector3 endWorld = Camera.main.ScreenToWorldPoint(new Vector2(endX, endY));
         float distance = Vector3.Distance(startWorld, endWorld);
@@ -55,20 +54,20 @@ public class ChartTradeArrow : UIComponent
 
         transform.position = new Vector3(startWorld.x + ( endWorld.x - startWorld.x ) / 2, startWorld.y + ( endWorld.y - startWorld.y ) / 2, startWorld.z);
 
-        transform.localRotation.Rotate2D(startWorld, endWorld);
+        transform.Rotate2D(startWorld, endWorld);
 
         transform.localScale = new Vector3(1, distance / baseLengthY,1);
 
         bUp = velocityY > 0;
         arrowRenderer.color = bUp ? upColor : downColor;
 
-        StartTransection();
+        StartFadeAway();
+        */
     }
 
     public override void BeginDrag(float screenX, float screenY)
     {
-        if (bArrowDisapear)
-            return;
+        StopFadeAway();
 
         startPos = new Vector2(screenX, screenY);
 
@@ -76,8 +75,8 @@ public class ChartTradeArrow : UIComponent
     }
     public override void DragTo(float screenX, float screenY)
     {
-        if (bArrowDisapear)
-            return;
+        StopFadeAway();
+        
 
         Vector3 startWorld = Camera.main.ScreenToWorldPoint(startPos);
         Vector3 endWorld = Camera.main.ScreenToWorldPoint(new Vector2(screenX, screenY));
@@ -86,44 +85,61 @@ public class ChartTradeArrow : UIComponent
 
         float distanceY = endWorld.y - startWorld.y;
 
+        if (distanceY == 0.0f)
+            return;
+
+        gameObject.SetActive(true);
+
         transform.position = new Vector3(startWorld.x + ( endWorld.x - startWorld.x ) / 2, startWorld.y + ( endWorld.y - startWorld.y ) / 2, startWorld.z);
 
-       
-        transform.localRotation.Rotate2D(startWorld, endWorld);
-        transform.localScale = new Vector3(1, distance / baseLengthY, 1);
+        transform.Rotate2D(startWorld, endWorld);
+
+        float scaleFactor = distance / baseLengthY;
+
+        transform.localScale = new Vector3(scaleFactor/2, scaleFactor, 1);
+
+        //https://answers.unity.com/questions/1042119/getting-a-sprites-size-in-pixels.html
+
+
 
         bUp = screenY - startPos.y > 0;
         arrowRenderer.color = bUp ? upColor : downColor;
     }
     public override void EndDrag(float velocityXScreen, float velocityYScreen)
     {
-        if (bArrowDisapear)
-            return;
-
-        bArrowDisapear = true;
-        StartTransection();
+        StartFadeAway();
         //Debug.LogFormat("EndDrag, velocityXScreen: {0}, velocityYScreen : {1}", velocityXScreen, velocityYScreen);
     }
 
-    public void StartTransection()
+    public void StartFadeAway()
     {
         MessageSystem.Instance.BroadcastSystems(null, "StartTransection", bUp, transform.localScale.y);
+
+        StopFadeAway();
+        bArrowDisapear = true;
+        gameObject.SetActive(true);
+        fadeAwayCorutine = StartCoroutine(FadeAway());
+    }
+
+    public void StopFadeAway()
+    {
+        if (bArrowDisapear == false)
+            return;
+
+        gameObject.SetActive(false);
 
         if (fadeAwayCorutine != null)
         {
             StopCoroutine(fadeAwayCorutine);
-            arrowRenderer.color = baseColor;
-
-
         }
-        
-        fadeAwayCorutine = StartCoroutine(FadeAway());
+
+        bArrowDisapear = false;
     }
 
     IEnumerator FadeAway()
     {
         float duration = 0;
-        Color beginColor = baseColor;
+        Color beginColor = arrowRenderer.color;
         Vector3 beginSize = transform.localScale;
         Vector3 endSizeTrans = new Vector3(fadeAwaySizeX, beginSize.y, beginSize.z);
 

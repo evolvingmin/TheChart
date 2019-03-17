@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ChallengeKit.Pattern;
 using ChallengeKit;
+using System;
 
 public class ChartIndicateParser : IParser
 {
@@ -20,6 +21,15 @@ public class ChartIndicateParser : IParser
         //MessageSystem.Instance.BroadcastSystems(null, "SetActive", "CandleDataDisplayer", bOpen);
         switch (Command)
         {
+            case "Tab":
+                chartIndicatorSystem.Tab((float)Objs[0], (float)Objs[1]);
+                break;
+            case "PointerUp":
+                chartIndicatorSystem.PointerUp((float)Objs[0], (float)Objs[1]);
+                return true;
+            case "PointerDown":
+                chartIndicatorSystem.PointerDown((float)Objs[0], (float)Objs[1], (float)Objs[2]);
+                return true;
             case "HandleSwipe":
                 chartIndicatorSystem.HandleSwipe((float)Objs[0], (float)Objs[1], (float)Objs[2], (float)Objs[3], (float)Objs[4], (float)Objs[5]);
                 return true;
@@ -78,6 +88,30 @@ public class ChartIndicatorSystem : SystemMono
         foreach (var uiComponent in uiComponents)
         {
             uiComponent.EndDrag(velocityX, velocityY);
+        }
+    }
+
+    public void PointerDown(float positionX, float positionY, float longTabDuration)
+    {
+        foreach (var uiComponent in uiComponents)
+        {
+            uiComponent.PointerDown(positionX, positionY, longTabDuration);
+        }
+    }
+
+    public void Tab(float positionX, float positionY)
+    {
+        foreach (var uiComponent in uiComponents)
+        {
+            uiComponent.Tab(positionX, positionY);
+        }
+    }
+
+    public void PointerUp(float positionX, float positionY)
+    {
+        foreach (var uiComponent in uiComponents)
+        {
+            uiComponent.PointerUp(positionX, positionY);
         }
     }
 }
