@@ -43,9 +43,19 @@ public class ChartGameMaster : SystemMono
 
     private Coroutine slowingCorutine = null;
 
+    private ResourceManager resourceManager;
+
+    private EconomySystem economySystem;
+
     private void Awake()
     {
         base.Init(new ChartGMParser());
+        resourceManager = GetComponent<ResourceManager>();
+        economySystem = GetComponent<EconomySystem>();
+
+        resourceManager.Initialize();
+        economySystem.Init();
+        Chart.Instance.Init();
     }
 
     // Start is called before the first frame update

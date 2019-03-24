@@ -36,6 +36,9 @@ public class CandleData
 public class Chart : Singleton<Chart>
 {
     [SerializeField]
+    private EconomySystem economySystem;
+
+    [SerializeField]
     private GameObject candlePrefab;
 
     // 화면에 표시하는 켄들 수
@@ -53,13 +56,11 @@ public class Chart : Singleton<Chart>
     [SerializeField]
     private ResourceManager resourceManager;
 
-    private int lastPrice = 5000;
+    private int LastPrice {  get { return economySystem.LastPrice; } }
 
     private int chartPriceLow = 0;
 
     private int chartPriceHigh = 10000; // 일단 어림짐작으로.
-
-    private float priceChangeLimitPercent = 0.1f;
 
     // 가변 카메라 비율 얻어 올 수 있도록 수정.
     [SerializeField]
@@ -115,8 +116,10 @@ public class Chart : Singleton<Chart>
     {
         candles = new List<Candle>();
         candleDatas = new List<CandleData>();
+    }
 
-        resourceManager.Initialize();
+    public Define.Result Init()
+    {
         candlePrefab.GetComponent<Candle>().SetBodySize(candleWidth);
         resourceManager.SetPrefab<GameObject>("Candle", "Base", candlePrefab, transform);
 
@@ -124,11 +127,13 @@ public class Chart : Singleton<Chart>
 
         chartCamera.transform.position = new Vector3(chartCamera.aspect * chartCamera.orthographicSize - leftMargin, chartCamera.orthographicSize, chartCamera.transform.position.z);
 
-        maxCandleCount = (int)( (( chartCamera.aspect * chartCamera.orthographicSize - leftMargin/2 ) * 2) / candleWidth ) ; 
+        maxCandleCount = (int)( ( ( chartCamera.aspect * chartCamera.orthographicSize - leftMargin / 2 ) * 2 ) / candleWidth );
         Debug.Log("Chart Awake, MaxCandleCount : " + maxCandleCount);
 
         ruler.Init(leftMargin, chartCamera.aspect * chartCamera.orthographicSize, chartCamera.orthographicSize * 2, positionLowY, positionHighY);
         ruler.UpdateNumbers(chartPriceLow, chartPriceHigh);
+
+        return Define.Result.OK;
     }
 
     private void Start()
@@ -169,43 +174,29 @@ public class Chart : Singleton<Chart>
             }
         }
 
-        // 2. 가격 갱신.
-
-        int maxDeltaPrice = (int)( lastPrice * priceChangeLimitPercent );
-        maxDeltaPrice = Mathf.Max(500, maxDeltaPrice);
-        lastPrice = Mathf.Max(Random.Range(lastPrice - maxDeltaPrice, lastPrice + maxDeltaPrice + 50), 0);
-
-        if(waitQuery != 0.0f)
-        {
-            int affected = (int)( lastPrice * waitQuery );
-            lastPrice = lastPrice + affected;
-            Debug.Log("Price You Affected: " + affected);
-            waitQuery = 0.0f;
-        }
-
-        // 3. 갱신된 가격정보로 으로 켄들 데이터 갱신.
+        // 2. 갱신된 가격정보로 으로 켄들 데이터 갱신.
         if (bNewCandleData)
         {
             if(candleDatas.Count > 1)
             {
-                GetCandleDataByIndex(dataIndex - 1).Update(lastPrice);
+                GetCandleDataByIndex(dataIndex - 1).Update(LastPrice);
             }
 
-            candleDatas.Add(new CandleData(lastPrice));
+            candleDatas.Add(new CandleData(LastPrice));
         }
         else
         {
-            GetCandleDataByIndex(dataIndex).Update(lastPrice);
+            GetCandleDataByIndex(dataIndex).Update(LastPrice);
         }
 
-        // 4. 갱신된 데이터 인덱스 기반으로 화면 영역을 넘어간 후처리
-        // 4 - 1 최소, 최대 가격 범위 다시 정함.
-        // 4 - 2 카메라 이동.
-        UpdateChartView(lastPrice, bNewCandleData, dataIndex >= maxCandleCount);
+        // 3. 갱신된 데이터 인덱스 기반으로 화면 영역을 넘어간 후처리
+        // 3 - 1 최소, 최대 가격 범위 다시 정함.
+        // 3 - 2 카메라 이동.
+        UpdateChartView(LastPrice, bNewCandleData, dataIndex >= maxCandleCount);
 
-        // 5. 데이터를 기준으로 바로 갱신이 필요한 캔들들은 직접 InvalidateUI 호출.
-        // 5 - 1 새 캔들 생성되면, 이전 캔들에겐 마지막 데이터로 종료
-        // 5 - 2 새 캔들은 현재 켄들 데이터 기준으로 갱신.
+        // 4. 데이터를 기준으로 바로 갱신이 필요한 캔들들은 직접 InvalidateUI 호출.
+        // 4 - 1 새 캔들 생성되면, 이전 캔들에겐 마지막 데이터로 종료
+        // 4 - 2 새 캔들은 현재 켄들 데이터 기준으로 갱신.
         if (candleDatas.Count > 1 && bNewCandleData)
         {
             GetCandleByIndex(dataIndex - 1).InvalidateUI(false);
@@ -239,7 +230,12 @@ public class Chart : Singleton<Chart>
         chartPriceHigh = newHighPrice;
         chartPriceLow = newLowPrice;
 
-        if(isDirty && ruler)
+        if(chartPriceHigh == chartPriceLow)
+        {
+            chartPriceLow = 0;
+        }
+
+        if (isDirty && ruler)
         {
             ruler.UpdateNumbers(chartPriceLow, chartPriceHigh);
         }

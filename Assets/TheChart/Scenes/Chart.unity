@@ -330,7 +330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00002670288
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22414360, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1560,7 +1560,6 @@ GameObject:
   m_Component:
   - component: {fileID: 901492126}
   - component: {fileID: 901492125}
-  - component: {fileID: 901492124}
   m_Layer: 0
   m_Name: Chart
   m_TagString: Untagged
@@ -1568,19 +1567,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &901492124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 901492123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbd85bbe60a3493428daf068d76317a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rootPath: Prefabs
 --- !u!114 &901492125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1593,14 +1579,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fab76c0a867e4754590b08e6bd7f23ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  economySystem: {fileID: 942921958}
   candlePrefab: {fileID: 13, guid: 4ad0f06199f43c640a1bd17717989d9d, type: 3}
   chartCamera: {fileID: 818185233}
   ruler: {fileID: 69606063}
   resourceManager: {fileID: 942921953}
-  leftMargin: 2
+  leftMargin: 1.5
   candleWidth: 0.32
   unitTime_Tick: 0.04
-  unitTime_Candle: 1
+  unitTime_Candle: 5
 --- !u!4 &901492126
 Transform:
   m_ObjectHideFlags: 0
@@ -1660,7 +1647,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2061543476}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1719,8 +1707,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac9dc90962135b4419b722741286fe21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chart: {fileID: 901492125}
   basePercent: 0.05
+  momentum: 100
+  momentumMin: -500
+  momentumMax: 500
+  startTraderNum: 5
+  maxTraderNum: 50
+  traderPrefab: {fileID: 2061543474}
 --- !u!114 &942921959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2404,6 +2397,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxScale: 4
   completeNofifyColor: {r: 0, g: 0.9663601, b: 1, a: 0.39215687}
+  addtionalAfterImageTime: 0.2
 --- !u!1 &1730707397
 GameObject:
   m_ObjectHideFlags: 0
@@ -2564,6 +2558,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1730707397}
   m_CullTransparentMesh: 0
+--- !u!1 &2061543474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2061543476}
+  - component: {fileID: 2061543475}
+  m_Layer: 0
+  m_Name: TraderSample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2061543475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061543474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 747c3bf81b573e64f89e12d3abd6e633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startCash: 0
+  startStock: 0
+  transectionTime_Tick: 2
+  plan: 1
+  TransectionReqLifeTime: 10
+--- !u!4 &2061543476
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061543474}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 942921954}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2064637802
 GameObject:
   m_ObjectHideFlags: 0

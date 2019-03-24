@@ -49,7 +49,7 @@ public class ChartDotIndicator : UIComponent
         
     }
 
-    public virtual void HandleSwipe(float startX, float startY, float endX, float endY, float velocityX, float velocityY)
+    public override void HandleSwipe(float startX, float startY, float endX, float endY, float velocityX, float velocityY)
     {
         StopShow();
     }
