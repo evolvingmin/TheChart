@@ -1704,7 +1704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac9dc90962135b4419b722741286fe21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basePercent: 0.05
+  basePercent: 5
   momentum: 100
   momentumMin: -500
   momentumMax: 500
