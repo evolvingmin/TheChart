@@ -46,6 +46,8 @@ public class TransectionReqData
     public int price;
     public int count;
     public float reqTime;
+
+    public int TotalPrice {  get { return price * count; } }
 }
 
 public class TransectionHistoryData
@@ -59,12 +61,12 @@ public class TransectionHistoryData
     public float completeTime;
 }
 
-
+// 
 public class EconomySystem : SystemMono
 {
 
     [SerializeField]
-    private float basePercent = 0.05f;
+    private float basePercent = 5f;
 
     // 이 가격을 모멘텀이라는 개념으로 바꾸자.
     // 이 모멘텀에 따라 Trader의 수가 증가하고
@@ -124,7 +126,6 @@ public class EconomySystem : SystemMono
         buyList = new List<TransectionReqData>();
         sellList = new List<TransectionReqData>();
         transectionHistory = new List<TransectionHistoryData>();
-
     }
 
     public Define.Result Init()
@@ -153,7 +154,7 @@ public class EconomySystem : SystemMono
 
     private void Update()
     {
-        int maxDeltaMomentum = (int)( momentum * momentumLimitRatio );
+        float maxDeltaMomentum = momentum != 0 ? momentum * momentumLimitRatio : basePercent;
         momentum = Mathf.Clamp(Random.Range(momentum - maxDeltaMomentum, momentum + maxDeltaMomentum), momentumMin, momentumMax);
 
         // 유입
@@ -189,6 +190,7 @@ public class EconomySystem : SystemMono
 
         int buyIndex = 0;
         int sellIndex = 0;
+
         while(buyIndex < buyList.Count && sellIndex < sellList.Count)
         {
             TransectionReqData buyData = buyList[buyIndex];
@@ -199,8 +201,8 @@ public class EconomySystem : SystemMono
             {
                 // 일단 이 시점부터 거래 성립.
 
-                bool bBuyingAll = buyData.count * buyData.price < sellData.price * sellData.count;
-                bool bPerfectTransection = buyData.count * buyData.price == sellData.price * sellData.count;
+                bool bBuyingAll = buyData.count * sellData.price < sellData.TotalPrice;
+                bool bPerfectTransection = buyData.count * sellData.price == sellData.TotalPrice;
 
                 int transectionCount = bBuyingAll ? buyData.count : sellData.count;
 
@@ -268,6 +270,11 @@ public class EconomySystem : SystemMono
                     }
                 }
 
+                if(historyData.count < 1)
+                {
+                    Debug.Break();
+                }
+
                 LastPrice = historyData.price;
                 transectionHistory.Add(historyData);
                 Debug.LogFormat("Transection : Buyer({0}), Seller({1}), Price({2}), Count({3})", 
@@ -280,25 +287,31 @@ public class EconomySystem : SystemMono
         }
     }
 
-    public void CancelTransectionAll(Dictionary<int, TransectionReqData> reqList, ref int cash, ref int stock)
+    public void CancelTransectionsAll(string traderName, Dictionary<int, TransectionReqData> reqList, ref int cash, ref int stock)
     {
         bTransectionHandle = false;
+
+        int initialCash = cash;
+        int initialStock = stock;
+
         foreach (var item in reqList)
         {
             if(item.Value.type == TransectionReqData.Type.Buy)
             {
-                cash += item.Value.price * item.Value.count;
-                buyList.Remove(item.Value);
+                cash += item.Value.TotalPrice;
             }
             else
             {
                 stock += item.Value.count;
-                sellList.Remove(item.Value);
             }
         }
+
+        buyList.RemoveAll((x) => x.trader.TraderName == traderName);
+        sellList.RemoveAll((x) => x.trader.TraderName == traderName);
+
         reqList.Clear();
         bTransectionHandle = true;
-        //Debug.LogFormat("CancelTransectionAll CashBack({0}), StockBack({1})", cash, stock);
+        Debug.LogFormat("CancelTransectionAll CashBack({0} -> {1}), StockBack({2} -> {3})", initialCash, cash, initialStock, stock);
     }
 
     public void OutTrader(Trader trader)
@@ -339,7 +352,6 @@ public class EconomySystem : SystemMono
 
         if (transectionData.type == TransectionReqData.Type.Buy)
         {
-            
             buyList.Add(transectionData);
             buyList.Sort((x, y) => x.price.CompareTo(y.price));
         }
@@ -352,10 +364,9 @@ public class EconomySystem : SystemMono
 
     }
 
-    // 오늘 그냥 이 부분 미완성으로 차트에 영향만 끼치는 거 영상으로 넣겠다.
     public void StartTransection(bool bUp, float Scale)
     {
         affectPercent = basePercent * ( bUp ? 1 : -1 ) * Scale;
-        LastPrice = (int)(LastPrice * affectPercent + LastPrice);
+        momentum = (int)(momentum * affectPercent + momentum);
     }
 }

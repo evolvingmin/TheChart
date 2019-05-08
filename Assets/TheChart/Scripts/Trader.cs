@@ -66,7 +66,7 @@ public class Trader : MonoBehaviour
     [SerializeField]
     private float TransectionReqLifeTime = 10.0f;
 
-    private float lastTransecionReqTime;
+    private float lastTransecionCompleteTime;
 
     private void Awake()
     {
@@ -96,10 +96,10 @@ public class Trader : MonoBehaviour
 
         currentTime += Time.deltaTime;
 
-        if (currentTime - lastTransecionReqTime > TransectionReqLifeTime)
+        if (currentTime - lastTransecionCompleteTime > TransectionReqLifeTime && reqList.Count > 0)
         {
-            economySystem.CancelTransectionAll(reqList, ref currentCash, ref currentStock);
-            lastTransecionReqTime = currentTime;
+            economySystem.CancelTransectionsAll(traderName, reqList, ref currentCash, ref currentStock);
+            lastTransecionCompleteTime = currentTime;
         }
 
         if (currentTime - lastTickTime < transectionTime_Tick)
@@ -121,45 +121,37 @@ public class Trader : MonoBehaviour
 
         switch (strategy)
         {
-            case Strategy.Default: // 이렇게 되면 이것도 하나의 클래스화 된다.
+            case Strategy.Default:
                 if(plan == Plan.Buy)
                 {
                     TransectionReqData transectionData = new TransectionReqData();
                     transectionData.type = TransectionReqData.Type.Buy;
-
-                    transectionData.price = (int)(economySystem.LastPrice / bigPictureIndex);
-                    transectionData.price = (int)(transectionData.price * ( 1 + economySystem.Momentum ));
+                    
+                    int buyPriceWithBigPicture = (int)(economySystem.LastPrice / bigPictureIndex);
+                    transectionData.price = (int)(buyPriceWithBigPicture * ( 1 + economySystem.Momentum ));
                     transectionData.count = (int)(( currentCash * investRatioIndex ) / transectionData.price);
-
-                    currentCash -= transectionData.price * transectionData.count;
                     transectionData.trader = this;
                     transectionData.reqTime = currentTime;
 
+                    currentCash -= transectionData.TotalPrice;
                     economySystem.RequestTransection(transectionData);
                     reqList.Add(transectionData.id, transectionData);
-                    lastTransecionReqTime = currentTime;
                 }
                 else
                 {
                     TransectionReqData transectionData = new TransectionReqData();
                     transectionData.type = TransectionReqData.Type.Sell;
-                    transectionData.price = (int)( economySystem.LastPrice * bigPictureIndex );
-                    //transectionData.price = (int)( transectionData.price * ( 1 + economySystem.Momentum ) );
+
+                    int sellPriceWithBigPicture = (int)(economySystem.LastPrice * bigPictureIndex);
+                    transectionData.price = (int)(sellPriceWithBigPicture * ( 1 + economySystem.Momentum ) );
+
                     transectionData.count = (int)( ( currentStock * exitRatioIndex ) );
-
-                    currentStock -= transectionData.count;
-
-                    if(currentStock <0)
-                    {
-                        Debug.Break();
-                    }
-
                     transectionData.trader = this;
                     transectionData.reqTime = currentTime;
 
+                    currentStock -= transectionData.count;
                     economySystem.RequestTransection(transectionData);
                     reqList.Add(transectionData.id, transectionData);
-                    lastTransecionReqTime = currentTime;
                 }
                 
                 break;
@@ -179,7 +171,7 @@ public class Trader : MonoBehaviour
             {
                 if(reqList.Count > 0)
                 {
-                    economySystem.CancelTransectionAll(reqList, ref currentCash, ref currentStock);
+                    economySystem.CancelTransectionsAll(traderName, reqList, ref currentCash, ref currentStock);
                 }
                 else
                 {
@@ -211,6 +203,8 @@ public class Trader : MonoBehaviour
             currentCash += historyData.price * historyData.count;
             reqList.Remove(historyData.sellID);
         }
+
+        lastTransecionCompleteTime = currentTime;
     }
 }
 
