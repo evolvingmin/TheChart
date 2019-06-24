@@ -25,7 +25,6 @@ public class EconomyParser : IParser
             case "StartTransection":
                 economySystem.StartTransection((bool)Objs[0], (float)Objs[1]);
                 return true;
-
         }
 
         return false;
@@ -61,7 +60,7 @@ public class TransectionHistoryData
     public float completeTime;
 }
 
-// 
+// 이쪽 전부 다시 짤 것. 엉성하게 코드부터 치지말고. 
 public class EconomySystem : SystemMono
 {
 
@@ -121,11 +120,11 @@ public class EconomySystem : SystemMono
 
     private void Awake()
     {
-        resourceManager = GetComponent<ResourceManager>();
-        traders = new Dictionary<string, Trader>(startTraderNum);
-        buyList = new List<TransectionReqData>();
-        sellList = new List<TransectionReqData>();
-        transectionHistory = new List<TransectionHistoryData>();
+        //resourceManager = GetComponent<ResourceManager>();
+        //traders = new Dictionary<string, Trader>(startTraderNum);
+        //buyList = new List<TransectionReqData>();
+        //sellList = new List<TransectionReqData>();
+        //transectionHistory = new List<TransectionHistoryData>();
     }
 
     public Define.Result Init()
@@ -151,141 +150,141 @@ public class EconomySystem : SystemMono
 
         return result;
     }
+    
+    //private void Update()
+    //{
+    //    float maxDeltaMomentum = momentum != 0 ? momentum * momentumLimitRatio : basePercent;
+    //    momentum = Mathf.Clamp(Random.Range(momentum - maxDeltaMomentum, momentum + maxDeltaMomentum), momentumMin, momentumMax);
 
-    private void Update()
-    {
-        float maxDeltaMomentum = momentum != 0 ? momentum * momentumLimitRatio : basePercent;
-        momentum = Mathf.Clamp(Random.Range(momentum - maxDeltaMomentum, momentum + maxDeltaMomentum), momentumMin, momentumMax);
+    //    // 유입
+    //    if (momentum > 0.0f)
+    //    {
+    //        if(traders.Count < maxTraderNum)
+    //        {
+    //            var traderObject = resourceManager.GetObject<GameObject>("Trader", "Base");
+    //            Trader trader = traderObject.GetComponent<Trader>();
+    //            string Name = "trader_" + traderNum++;
+    //            trader.Init(this, Name);
+    //            traders.Add(Name, trader);
+    //        }
+    //    }
 
-        // 유입
-        if (momentum > 0.0f)
-        {
-            if(traders.Count < maxTraderNum)
-            {
-                var traderObject = resourceManager.GetObject<GameObject>("Trader", "Base");
-                Trader trader = traderObject.GetComponent<Trader>();
-                string Name = "trader_" + traderNum++;
-                trader.Init(this, Name);
-                traders.Add(Name, trader);
-            }
-        }
+    //    // 거래 가능 여부 확인 주기.
+    //    currentTime += Time.deltaTime;
 
-        // 거래 가능 여부 확인 주기.
-        currentTime += Time.deltaTime;
+    //    if (currentTime - lastTickTime < checkTransection_Tick)
+    //        return;
 
-        if (currentTime - lastTickTime < checkTransection_Tick)
-            return;
+    //    lastTickTime = currentTime;
 
-        lastTickTime = currentTime;
+    //    if (buyList.Count == 0 || sellList.Count == 0)
+    //        return;
 
-        if (buyList.Count == 0 || sellList.Count == 0)
-            return;
-
-        if (bTransectionHandle == false)
-        {
-            Debug.Log("Transection Pause this Update Routine!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            return;
-        }
+    //    if (bTransectionHandle == false)
+    //    {
+    //        Debug.Log("Transection Pause this Update Routine!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    //        return;
+    //    }
             
 
-        int buyIndex = 0;
-        int sellIndex = 0;
+    //    int buyIndex = 0;
+    //    int sellIndex = 0;
 
-        while(buyIndex < buyList.Count && sellIndex < sellList.Count)
-        {
-            TransectionReqData buyData = buyList[buyIndex];
-            TransectionReqData sellData = sellList[sellIndex];
+    //    while(buyIndex < buyList.Count && sellIndex < sellList.Count)
+    //    {
+    //        TransectionReqData buyData = buyList[buyIndex];
+    //        TransectionReqData sellData = sellList[sellIndex];
 
-            // 비싸게 산다고 하더라도, 실 거래가는 파는 사람의 가격에 맞춰야 한다.
-            if (buyData.price >= sellData.price)
-            {
-                // 일단 이 시점부터 거래 성립.
+    //        // 비싸게 산다고 하더라도, 실 거래가는 파는 사람의 가격에 맞춰야 한다.
+    //        if (buyData.price >= sellData.price)
+    //        {
+    //            // 일단 이 시점부터 거래 성립.
 
-                bool bBuyingAll = buyData.count * sellData.price < sellData.TotalPrice;
-                bool bPerfectTransection = buyData.count * sellData.price == sellData.TotalPrice;
+    //            bool bBuyingAll = buyData.count * sellData.price < sellData.TotalPrice;
+    //            bool bPerfectTransection = buyData.count * sellData.price == sellData.TotalPrice;
 
-                int transectionCount = bBuyingAll ? buyData.count : sellData.count;
+    //            int transectionCount = bBuyingAll ? buyData.count : sellData.count;
 
-                TransectionHistoryData historyData = new TransectionHistoryData
-                {
-                    count = transectionCount,
-                    price = sellData.price,
-                    buyer = buyData.trader,
-                    seller = sellData.trader,
-                    buyID = buyData.id,
-                    sellID = sellData.id,
-                    completeTime = currentTime,
-                };
+    //            TransectionHistoryData historyData = new TransectionHistoryData
+    //            {
+    //                count = transectionCount,
+    //                price = sellData.price,
+    //                buyer = buyData.trader,
+    //                seller = sellData.trader,
+    //                buyID = buyData.id,
+    //                sellID = sellData.id,
+    //                completeTime = currentTime,
+    //            };
 
-                historyData.buyer.TransectionComplete(historyData);
-                historyData.seller.TransectionComplete(historyData);
+    //            historyData.buyer.TransectionComplete(historyData);
+    //            historyData.seller.TransectionComplete(historyData);
 
-                if(bPerfectTransection)
-                {
-                    if (buyIndex >= 0 && buyIndex < buyList.Count)
-                    {
-                        buyList.RemoveAt(buyIndex);
-                    }
-                    else
-                    {
-                        Debug.DebugBreak();
-                    }
-                    if(sellIndex >= 0 && sellIndex < sellList.Count)
-                    {
-                        sellList.RemoveAt(sellIndex);
-                    }
-                    else
-                    {
-                        Debug.DebugBreak();
-                    }
+    //            if(bPerfectTransection)
+    //            {
+    //                if (buyIndex >= 0 && buyIndex < buyList.Count)
+    //                {
+    //                    buyList.RemoveAt(buyIndex);
+    //                }
+    //                else
+    //                {
+    //                    Debug.DebugBreak();
+    //                }
+    //                if(sellIndex >= 0 && sellIndex < sellList.Count)
+    //                {
+    //                    sellList.RemoveAt(sellIndex);
+    //                }
+    //                else
+    //                {
+    //                    Debug.DebugBreak();
+    //                }
                     
-                }
-                else
-                {
-                    if (bBuyingAll)
-                    {
-                        if(buyIndex >= 0 && buyIndex < buyList.Count)
-                        {
-                            buyList.RemoveAt(buyIndex);
-                        }
-                        else
-                        {
-                            Debug.DebugBreak();
-                        }
+    //            }
+    //            else
+    //            {
+    //                if (bBuyingAll)
+    //                {
+    //                    if(buyIndex >= 0 && buyIndex < buyList.Count)
+    //                    {
+    //                        buyList.RemoveAt(buyIndex);
+    //                    }
+    //                    else
+    //                    {
+    //                        Debug.DebugBreak();
+    //                    }
                         
-                        sellList[sellIndex].count -= buyData.count;
-                    }
-                    else if (bBuyingAll == false && sellIndex < sellList.Count)
-                    {
-                        if(sellIndex >= 0)
-                        {
-                            sellList.RemoveAt(sellIndex);
-                        }
-                        else
-                        {
-                            Debug.DebugBreak();
-                        }
+    //                    sellList[sellIndex].count -= buyData.count;
+    //                }
+    //                else if (bBuyingAll == false && sellIndex < sellList.Count)
+    //                {
+    //                    if(sellIndex >= 0)
+    //                    {
+    //                        sellList.RemoveAt(sellIndex);
+    //                    }
+    //                    else
+    //                    {
+    //                        Debug.DebugBreak();
+    //                    }
                         
-                        buyList[buyIndex].count -= sellData.count;
-                    }
-                }
+    //                    buyList[buyIndex].count -= sellData.count;
+    //                }
+    //            }
 
-                if(historyData.count < 1)
-                {
-                    Debug.Break();
-                }
+    //            if(historyData.count < 1)
+    //            {
+    //                Debug.Break();
+    //            }
 
-                LastPrice = historyData.price;
-                transectionHistory.Add(historyData);
-                Debug.LogFormat("Transection : Buyer({0}), Seller({1}), Price({2}), Count({3})", 
-                    historyData.buyer.TraderName, historyData.seller.TraderName, historyData.price, historyData.count);
-            }
-            else
-            {
-                buyIndex++;
-            }
-        }
-    }
+    //            LastPrice = historyData.price;
+    //            transectionHistory.Add(historyData);
+    //            Debug.LogFormat("Transection : Buyer({0}), Seller({1}), Price({2}), Count({3})", 
+    //                historyData.buyer.TraderName, historyData.seller.TraderName, historyData.price, historyData.count);
+    //        }
+    //        else
+    //        {
+    //            buyIndex++;
+    //        }
+    //    }
+    //}
 
     public void CancelTransectionsAll(string traderName, Dictionary<int, TransectionReqData> reqList, ref int cash, ref int stock)
     {
@@ -322,28 +321,28 @@ public class EconomySystem : SystemMono
         resourceManager.CollectGameObject("Trader", trader.gameObject);
     }
 
-    void OnGUI()
-    {
-        if(buyList.Count != 0)
-        {
-            GUI.color = Color.red;
-            GUI.Label(new Rect(10, 300, 600, 20), string.Format("BuyRange Min {0} , Max {1}, Count {2}", 
-                buyList[0].price, buyList[buyList.Count - 1].price, buyList.Count));
-        }
+    //void OnGUI()
+    //{
+    //    if(buyList.Count != 0)
+    //    {
+    //        GUI.color = Color.red;
+    //        GUI.Label(new Rect(10, 300, 600, 20), string.Format("BuyRange Min {0} , Max {1}, Count {2}", 
+    //            buyList[0].price, buyList[buyList.Count - 1].price, buyList.Count));
+    //    }
 
-        if (sellList.Count != 0)
-        {
-            GUI.color = Color.blue;
-            GUI.Label(new Rect(10, 315, 600, 20), string.Format("SellRange Min {0} , Max {1}, Count {2}", 
-                sellList[0].price, sellList[sellList.Count - 1].price, sellList.Count));
-        }
+    //    if (sellList.Count != 0)
+    //    {
+    //        GUI.color = Color.blue;
+    //        GUI.Label(new Rect(10, 315, 600, 20), string.Format("SellRange Min {0} , Max {1}, Count {2}", 
+    //            sellList[0].price, sellList[sellList.Count - 1].price, sellList.Count));
+    //    }
 
-        GUI.color = Color.black;
+    //    GUI.color = Color.black;
 
-        GUI.Label(new Rect(10, 330, 600, 20), string.Format("Last Price :{0}", LastPrice));
-        // buyer, seller total
-        //GUI.Label(new Rect(10, 0, 600, 80), resourceManager.ToString());
-    }
+    //    GUI.Label(new Rect(10, 330, 600, 20), string.Format("Last Price :{0}", LastPrice));
+    //    // buyer, seller total
+    //    //GUI.Label(new Rect(10, 0, 600, 80), resourceManager.ToString());
+    //}
 
     public void RequestTransection(TransectionReqData transectionData)
     {

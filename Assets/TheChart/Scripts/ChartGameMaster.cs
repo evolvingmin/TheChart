@@ -53,8 +53,8 @@ public class ChartGameMaster : SystemMono
         resourceManager = GetComponent<ResourceManager>();
         economySystem = GetComponent<EconomySystem>();
 
-        resourceManager.Initialize();
-        economySystem.Init();
+        resourceManager.Init();
+        //economySystem.Init();
         Chart.Instance.Init();
     }
 

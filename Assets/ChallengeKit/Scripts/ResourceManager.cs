@@ -223,7 +223,7 @@ namespace ChallengeKit
         private string rootPath = "Prefabs";
         public string RootPath { get { return rootPath; } }
 
-        public Define.Result Initialize()
+        public Define.Result Init()
         {
             //this.rootPath = rootPath;
             collections = new Dictionary<string, UnityObjectCollection>();

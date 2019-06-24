@@ -15,12 +15,12 @@ public class CandleData
     public int high;
     public int low;
 
-    public CandleData(int lastPrice)
+    public CandleData(int initPrice)
     {
-        open = lastPrice;
-        end = lastPrice;
-        high = lastPrice;
-        low = lastPrice;
+        open = initPrice;
+        end = initPrice;
+        high = initPrice;
+        low = initPrice;
     }
 
     public bool Update(int newPrice)
@@ -56,7 +56,7 @@ public class Chart : Singleton<Chart>
     [SerializeField]
     private ResourceManager resourceManager;
 
-    private int LastPrice {  get { return economySystem.LastPrice; } }
+    //private int LastPrice {  get { return economySystem.LastPrice; } }
 
     private int chartPriceLow = 0;
 
@@ -94,7 +94,7 @@ public class Chart : Singleton<Chart>
     private float endTime;
 
     // new 경제 관련 제어
-
+    private int lastPrice = 5000; // 랜덤값 제어로 재 갱신, 일단 트레이더 부분은 좀 더 고민이 필요하다.
     float waitQuery = 0.0f;
 
     public Vector3 CandleStartPosRoot
@@ -152,7 +152,7 @@ public class Chart : Singleton<Chart>
 
         if (currentTime - lastTickTime < unitTime_Tick)
             return;
-
+        
         lastTickTime = currentTime;
 
         dataIndex = (int)( currentTime / unitTime_Candle );
@@ -174,25 +174,33 @@ public class Chart : Singleton<Chart>
             }
         }
 
-        // 2. 갱신된 가격정보로 으로 켄들 데이터 갱신.
+        int maxDeltaPrice = (int)(lastPrice * 0.015f);
+        maxDeltaPrice = Mathf.Max(500, maxDeltaPrice);
+        lastPrice = Mathf.Max(Random.Range(lastPrice - maxDeltaPrice, lastPrice + maxDeltaPrice + 50), 0);
+
+        // 2. 갱신된 가격정보로 켄들 데이터 갱신.
         if (bNewCandleData)
         {
             if(candleDatas.Count > 1)
             {
-                GetCandleDataByIndex(dataIndex - 1).Update(LastPrice);
+                GetCandleDataByIndex(dataIndex - 1).Update(lastPrice);
+
+                var candleData = GetCandleDataByIndex(dataIndex - 1);
+                Debug.LogFormat(" open : {0}, end : {1}, low {2}, high : {3}", candleData.open, candleData.end, candleData.low, candleData.high);
             }
 
-            candleDatas.Add(new CandleData(LastPrice));
+            candleDatas.Add(new CandleData(lastPrice));
+            
         }
         else
         {
-            GetCandleDataByIndex(dataIndex).Update(LastPrice);
+            GetCandleDataByIndex(dataIndex).Update(lastPrice);
         }
 
         // 3. 갱신된 데이터 인덱스 기반으로 화면 영역을 넘어간 후처리
         // 3 - 1 최소, 최대 가격 범위 다시 정함.
         // 3 - 2 카메라 이동.
-        UpdateChartView(LastPrice, bNewCandleData, dataIndex >= maxCandleCount);
+        UpdateChartView(lastPrice, bNewCandleData, dataIndex >= maxCandleCount);
 
         // 4. 데이터를 기준으로 바로 갱신이 필요한 캔들들은 직접 InvalidateUI 호출.
         // 4 - 1 새 캔들 생성되면, 이전 캔들에겐 마지막 데이터로 종료
